@@ -1,0 +1,1563 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doclyfi — Tu archivo inteligente</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f0f5ff;
+        --surface: #e6eef9;
+        --card: #ffffff;
+        --border: #c8d8f0;
+        --accent: #5499e3;
+        --accent2: #4ac4ed;
+        --dim: #a0b8d8;
+        --text: #152035;
+        --muted: #4a6585;
+        --white: #ffffff;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 16px;
+        line-height: 1.7;
+        overflow-x: hidden;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        font-family: Poppins, sans-serif;
+        line-height: 1.15;
+      }
+
+      /* ── NAV ─────────────────────────────────────────── */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.1rem 4rem;
+        background: rgba(240, 245, 255, 0.92);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .nav-logo {
+        font-family: Poppins, sans-serif;
+        font-size: 1.45rem;
+        font-weight: 800;
+        color: var(--accent);
+        text-decoration: none;
+        letter-spacing: -0.5px;
+      }
+      .nav-logo span {
+        color: var(--accent);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2.2rem;
+        list-style: none;
+      }
+      .nav-links a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.92rem;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--accent);
+      }
+
+      .nav-cta {
+        background: var(--accent);
+        color: #ffffff;
+        font-family: Poppins, sans-serif;
+        font-weight: 700;
+        font-size: 0.88rem;
+        padding: 0.6rem 1.4rem;
+        border-radius: 8px;
+        text-decoration: none;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+      }
+      .nav-cta:hover {
+        background: var(--accent2);
+        transform: translateY(-1px);
+      }
+
+      /* ── HERO ────────────────────────────────────────── */
+      #inicio {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 9rem 2rem 5rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-glow {
+        position: absolute;
+        width: 700px;
+        height: 700px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(84, 153, 227, 0.15) 0%,
+          rgba(74, 196, 237, 0.06) 50%,
+          transparent 70%
+        );
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+      .hero-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(var(--border) 1px, transparent 1px),
+          linear-gradient(90deg, var(--border) 1px, transparent 1px);
+        background-size: 48px 48px;
+        opacity: 0.35;
+        mask-image: radial-gradient(
+          ellipse 80% 60% at 50% 50%,
+          black 30%,
+          transparent 100%
+        );
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(84, 153, 227, 0.1);
+        border: 1px solid rgba(84, 153, 227, 0.3);
+        color: var(--accent2);
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 0.35rem 1rem;
+        border-radius: 100px;
+        margin-bottom: 1.8rem;
+        position: relative;
+      }
+      .hero-badge::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        background: var(--accent2);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.4;
+          transform: scale(0.7);
+        }
+      }
+
+      .hero h1 {
+        font-size: clamp(2.8rem, 7vw, 5.4rem);
+        font-weight: 800;
+        color: var(--text);
+        max-width: 820px;
+        line-height: 1.08;
+        letter-spacing: -2px;
+        margin-bottom: 1.4rem;
+        position: relative;
+      }
+      .hero h1 em {
+        font-style: normal;
+        color: var(--accent2);
+      }
+
+      .hero p {
+        font-size: 1.15rem;
+        color: var(--muted);
+        max-width: 560px;
+        margin: 0 auto 2.6rem;
+        position: relative;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        color: #ffffff;
+        font-family: Poppins, sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        padding: 0.85rem 2.2rem;
+        border-radius: 10px;
+        text-decoration: none;
+        transition:
+          opacity 0.2s,
+          transform 0.15s,
+          box-shadow 0.2s;
+        box-shadow: 0 0 30px rgba(84, 153, 227, 0.35);
+      }
+      .btn-primary:hover {
+        opacity: 0.88;
+        transform: translateY(-2px);
+        box-shadow: 0 0 48px rgba(74, 196, 237, 0.45);
+      }
+
+      .btn-ghost {
+        background: transparent;
+        color: var(--text);
+        font-family: Poppins, sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 0.85rem 2rem;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        text-decoration: none;
+        transition:
+          border-color 0.2s,
+          color 0.2s;
+      }
+      .btn-ghost:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* ── FLOATING CARDS ──────────────────────────────── */
+      .float-cards {
+        position: relative;
+        width: 100%;
+        max-width: 900px;
+        margin: 4rem auto 0;
+        height: 220px;
+      }
+      .fcard {
+        position: absolute;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.1rem 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        box-shadow: 0 8px 32px rgba(84, 153, 227, 0.12);
+      }
+      .fcard-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+      }
+      .fcard-icon.green {
+        background: rgba(84, 153, 227, 0.15);
+      }
+      .fcard-icon.blue {
+        background: rgba(74, 196, 237, 0.12);
+      }
+      .fcard-icon.yellow {
+        background: rgba(255, 200, 80, 0.1);
+      }
+      .fcard-title {
+        font-family: Poppins, sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: var(--text);
+      }
+      .fcard-sub {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      .fcard:nth-child(1) {
+        left: 0;
+        top: 20px;
+        animation: float1 5s ease-in-out infinite;
+      }
+      .fcard:nth-child(2) {
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0;
+        animation: float2 6s ease-in-out infinite;
+      }
+      .fcard:nth-child(3) {
+        right: 0;
+        top: 30px;
+        animation: float3 4.5s ease-in-out infinite;
+      }
+
+      @keyframes float1 {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-12px);
+        }
+      }
+      @keyframes float2 {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        50% {
+          transform: translateX(-50%) translateY(-10px);
+        }
+      }
+      @keyframes float3 {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-14px);
+        }
+      }
+
+      /* ── SECTION BASE ────────────────────────────────── */
+      section {
+        padding: 7rem 2rem;
+      }
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .section-label {
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 0.8rem;
+      }
+      .section-title {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -1px;
+        margin-bottom: 1rem;
+      }
+      .section-desc {
+        color: var(--muted);
+        font-size: 1.05rem;
+        max-width: 520px;
+      }
+      .section-head {
+        margin-bottom: 3.5rem;
+      }
+
+      /* ── FEATURES ────────────────────────────────────── */
+      #funciones {
+        background: var(--surface);
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .feat-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 2rem;
+        transition:
+          border-color 0.25s,
+          transform 0.25s;
+        position: relative;
+        overflow: hidden;
+      }
+      .feat-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at 50% -10%,
+          rgba(84, 153, 227, 0.08),
+          transparent 70%
+        );
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .feat-card:hover {
+        border-color: rgba(84, 153, 227, 0.5);
+        transform: translateY(-4px);
+      }
+      .feat-card:hover::after {
+        opacity: 1;
+      }
+
+      .feat-emoji {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: rgba(84, 153, 227, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1.3rem;
+      }
+      .feat-card h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+      }
+      .feat-card p {
+        font-size: 0.93rem;
+        color: var(--muted);
+      }
+
+      /* ── HOW IT WORKS ────────────────────────────────── */
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        position: relative;
+      }
+      .steps::before {
+        content: "";
+        position: absolute;
+        left: 27px;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: linear-gradient(to bottom, var(--accent), transparent);
+      }
+
+      .step {
+        display: flex;
+        gap: 1.8rem;
+        align-items: flex-start;
+        padding: 2rem 0;
+      }
+      .step-num {
+        flex-shrink: 0;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--card);
+        border: 2px solid var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Poppins, sans-serif;
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: var(--accent);
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 0 20px rgba(84, 153, 227, 0.3);
+      }
+      .step-content h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 0.4rem;
+      }
+      .step-content p {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      /* ── NOTIFICATIONS ───────────────────────────────── */
+      #notificaciones {
+        background: var(--surface);
+      }
+      .notif-wrap {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: center;
+      }
+      .notif-demo {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .notif-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.1rem 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transform: translateX(40px);
+        opacity: 0;
+        animation: slideIn 0.6s forwards;
+      }
+      .notif-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .notif-card:nth-child(2) {
+        animation-delay: 0.35s;
+      }
+      .notif-card:nth-child(3) {
+        animation-delay: 0.6s;
+      }
+      @keyframes slideIn {
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      .notif-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+      .ni-green {
+        background: rgba(84, 153, 227, 0.15);
+      }
+      .ni-orange {
+        background: rgba(255, 160, 80, 0.12);
+      }
+      .ni-blue {
+        background: rgba(74, 196, 237, 0.12);
+      }
+
+      .notif-body strong {
+        font-size: 0.9rem;
+        color: var(--text);
+        font-weight: 600;
+        display: block;
+      }
+      .notif-body span {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      /* ── CTA ─────────────────────────────────────────── */
+      #lista {
+        text-align: center;
+        background: linear-gradient(135deg, #deeaf8 0%, #e8f3fb 100%);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .cta-box {
+        max-width: 680px;
+        margin: 0 auto;
+      }
+      .cta-box h2 {
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -1.5px;
+        margin-bottom: 1rem;
+      }
+      .cta-box h2 span {
+        color: var(--accent2);
+      }
+      .cta-box p {
+        color: var(--muted);
+        margin-bottom: 2rem;
+        font-size: 1.05rem;
+      }
+
+      .cta-form {
+        display: flex;
+        gap: 0.7rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .cta-form input {
+        background: var(--card);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.95rem;
+        padding: 0.82rem 1.3rem;
+        border-radius: 10px;
+        outline: none;
+        width: 280px;
+        transition: border-color 0.2s;
+      }
+      .cta-form input:focus {
+        border-color: var(--accent);
+      }
+      .cta-form input::placeholder {
+        color: var(--dim);
+      }
+      .cta-form button {
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        color: #ffffff;
+        font-family: Poppins, sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        padding: 0.82rem 1.8rem;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+      .cta-form button:hover {
+        opacity: 0.85;
+      }
+
+      /* ── PRIVACY POLICY ──────────────────────────────── */
+      #privacidad {
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+      }
+
+      .privacy-header {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+      .privacy-header .section-desc {
+        margin: 0 auto;
+      }
+
+      .privacy-grid {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        gap: 3rem;
+        align-items: start;
+      }
+
+      .privacy-nav {
+        position: sticky;
+        top: 90px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.4rem;
+      }
+      .privacy-nav p {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--dim);
+        margin-bottom: 0.9rem;
+      }
+      .privacy-nav ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+      .privacy-nav a {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--muted);
+        text-decoration: none;
+        padding: 0.4rem 0.6rem;
+        border-radius: 7px;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .privacy-nav a:hover {
+        background: rgba(84, 153, 227, 0.1);
+        color: var(--accent);
+      }
+
+      .privacy-content {
+        display: flex;
+        flex-direction: column;
+        gap: 2.8rem;
+      }
+
+      .priv-section {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 2.2rem;
+        scroll-margin-top: 90px;
+      }
+      .priv-section h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 1rem;
+        padding-bottom: 0.7rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .priv-section h3 .priv-num {
+        background: rgba(84, 153, 227, 0.14);
+        color: var(--accent2);
+        font-size: 0.72rem;
+        font-weight: 800;
+        padding: 0.2rem 0.55rem;
+        border-radius: 6px;
+        letter-spacing: 0.04em;
+      }
+
+      .priv-section p,
+      .priv-section li {
+        font-size: 0.93rem;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+      .priv-section ul {
+        padding-left: 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .priv-section .sub-group {
+        margin-top: 0.8rem;
+      }
+      .priv-section .sub-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--accent);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 0.4rem;
+      }
+
+      .priv-contact {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(84, 153, 227, 0.08);
+        border: 1px solid rgba(84, 153, 227, 0.25);
+        color: var(--accent);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        text-decoration: none;
+        margin-top: 0.6rem;
+        transition: background 0.2s;
+      }
+      .priv-contact:hover {
+        background: rgba(84, 153, 227, 0.16);
+      }
+
+      .priv-address {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1rem 1.2rem;
+        font-size: 0.88rem;
+        color: var(--muted);
+        margin-top: 0.8rem;
+        line-height: 1.9;
+      }
+
+      .priv-highlight {
+        background: rgba(74, 196, 237, 0.06);
+        border-left: 3px solid var(--accent2);
+        padding: 0.9rem 1.1rem;
+        border-radius: 0 8px 8px 0;
+        margin-top: 0.8rem;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      /* ── FOOTER ──────────────────────────────────────── */
+      footer {
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        padding: 3rem 2rem;
+      }
+      .footer-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+      }
+      .footer-logo {
+        font-family: Poppins, sans-serif;
+        font-weight: 800;
+        font-size: 1.3rem;
+        color: var(--text);
+        text-decoration: none;
+      }
+      .footer-logo span {
+        color: var(--accent2);
+      }
+      .footer-links {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+      .footer-links a {
+        font-size: 0.85rem;
+        color: var(--muted);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .footer-links a:hover {
+        color: var(--accent);
+      }
+      .footer-copy {
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      /* ── RESPONSIVE ──────────────────────────────────── */
+      @media (max-width: 900px) {
+        nav {
+          padding: 1rem 1.5rem;
+        }
+        .nav-links {
+          display: none;
+        }
+        .notif-wrap {
+          grid-template-columns: 1fr;
+        }
+        .privacy-grid {
+          grid-template-columns: 1fr;
+        }
+        .privacy-nav {
+          position: static;
+        }
+        .float-cards {
+          height: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          position: static;
+        }
+        .fcard {
+          position: static;
+          transform: none !important;
+          animation: none !important;
+        }
+      }
+      @media (max-width: 600px) {
+        section {
+          padding: 5rem 1.2rem;
+        }
+        .steps::before {
+          left: 23px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <a href="#inicio" class="nav-logo">Doclyfi</a>
+      <ul class="nav-links">
+        <li><a href="#funciones">Funciones</a></li>
+        <li><a href="#como-funciona">Cómo funciona</a></li>
+        <li><a href="#notificaciones">Alertas</a></li>
+        <li><a href="#privacidad">Privacidad</a></li>
+      </ul>
+      <a href="#lista" class="nav-cta">Unirse a la lista</a>
+    </nav>
+
+    <!-- HERO -->
+    <section id="inicio" class="hero">
+      <div class="hero-grid"></div>
+      <div class="hero-glow"></div>
+
+      <div class="hero-badge">Próximamente · En desarrollo</div>
+
+      <h1>Todos tus documentos,<br /><em>organizados y alertados</em></h1>
+
+      <p>
+        Doclyfi te ayuda a almacenar garantías, recibos, contratos y gastos, y
+        te avisa antes de que venzan o tengas un pago próximo.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#lista" class="btn-primary">Unirme a la lista de espera</a>
+        <a href="#funciones" class="btn-ghost">Ver funciones →</a>
+      </div>
+
+      <div class="float-cards">
+        <div class="fcard">
+          <div class="fcard-icon green">🧾</div>
+          <div>
+            <div class="fcard-title">Garantía registrada</div>
+            <div class="fcard-sub">Cafetera · Vence en 8 meses</div>
+          </div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-icon yellow">⚡</div>
+          <div>
+            <div class="fcard-title">Pago próximo</div>
+            <div class="fcard-sub">Recibo de luz · En 3 días</div>
+          </div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-icon blue">📄</div>
+          <div>
+            <div class="fcard-title">Contrato vigente</div>
+            <div class="fcard-sub">Arrendamiento · 11 meses restantes</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FUNCIONES -->
+    <section id="funciones">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-label">Funciones</div>
+          <h2 class="section-title">Todo lo que Doclyfi<br />hace por ti</h2>
+          <p class="section-desc">
+            Centraliza y controla cada documento importante sin esfuerzo.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feat-card">
+            <div class="feat-emoji">🛍️</div>
+            <h3>Compras con garantía</h3>
+            <p>
+              Sube tus tickets y recibos de compras con garantía. Doclyfi
+              registra la fecha de vencimiento y te avisa antes de que expire.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-emoji">💸</div>
+            <h3>Control de gastos e ingresos</h3>
+            <p>
+              Lleva un registro claro de tus gastos y entradas de dinero.
+              Visualiza tu balance sin complicaciones.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-emoji">💡</div>
+            <h3>Recibos de servicios</h3>
+            <p>
+              Almacena tus recibos de agua, luz, gas, internet y más. Nunca
+              olvides una fecha de pago.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-emoji">📑</div>
+            <h3>Contratos con vigencia</h3>
+            <p>
+              Guarda contratos de arrendamiento, servicios o cualquier acuerdo y
+              recibe alertas antes de que venzan.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-emoji">🗂️</div>
+            <h3>Archivo digital inteligente</h3>
+            <p>
+              Todos tus documentos en un solo lugar, organizados y fáciles de
+              encontrar cuando los necesitas.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-emoji">🤖</div>
+            <h3>Procesamiento automático</h3>
+            <p>
+              Doclyfi extrae fechas, montos e información clave de tus
+              documentos usando OCR para que no tengas que capturarla
+              manualmente.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section id="como-funciona">
+      <div class="container">
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+          "
+        >
+          <div>
+            <div class="section-head">
+              <div class="section-label">Cómo funciona</div>
+              <h2 class="section-title">Simple, rápido<br />y sin papeleo</h2>
+              <p class="section-desc">
+                Doclyfi elimina la fricción de gestionar tus documentos
+                importantes.
+              </p>
+            </div>
+            <div class="steps">
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h3>Sube tu documento</h3>
+                  <p>
+                    Foto, PDF o imagen desde la app Doclyfi o directamente desde
+                    WhatsApp con nuestro chatbot.
+                  </p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h3>Doclyfi lo procesa</h3>
+                  <p>
+                    Nuestro sistema de OCR extrae la información relevante:
+                    fechas, montos y tipo de documento de forma automática.
+                  </p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h3>Recibe alertas a tiempo</h3>
+                  <p>
+                    Te notificamos vía push notification o mensaje de WhatsApp
+                    cuando se acerque un vencimiento o pago.
+                  </p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <h3>Consulta cuando quieras</h3>
+                  <p>
+                    Accede a todo tu historial de documentos y gastos en
+                    cualquier momento desde la app.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            style="
+              background: var(--card);
+              border: 1px solid var(--border);
+              border-radius: 20px;
+              padding: 2.5rem;
+              margin-top: 1rem;
+            "
+          >
+            <p
+              style="
+                font-size: 0.75rem;
+                font-weight: 700;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: var(--dim);
+                margin-bottom: 1.5rem;
+              "
+            >
+              Canales de entrada
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 1.2rem">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 1rem;
+                  padding: 1.1rem;
+                  background: var(--surface);
+                  border: 1px solid var(--border);
+                  border-radius: 12px;
+                "
+              >
+                <span style="font-size: 1.8rem">📱</span>
+                <div>
+                  <div
+                    style="
+                      font-family: &quot;Syne&quot;, sans-serif;
+                      font-weight: 700;
+                      color: var(--text);
+                      font-size: 0.95rem;
+                    "
+                  >
+                    App Doclyfi
+                  </div>
+                  <div style="font-size: 0.82rem; color: var(--muted)">
+                    Disponible pronto · iOS y Android
+                  </div>
+                </div>
+                <span
+                  style="
+                    margin-left: auto;
+                    font-size: 0.72rem;
+                    color: var(--accent2);
+                    background: rgba(74, 196, 237, 0.1);
+                    padding: 0.2rem 0.6rem;
+                    border-radius: 6px;
+                    font-weight: 700;
+                  "
+                  >En desarrollo</span
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 1rem;
+                  padding: 1.1rem;
+                  background: var(--surface);
+                  border: 1px solid var(--border);
+                  border-radius: 12px;
+                "
+              >
+                <span style="font-size: 1.8rem">💬</span>
+                <div>
+                  <div
+                    style="
+                      font-family: &quot;Poppins&quot;, sans-serif;
+                      font-weight: 700;
+                      color: var(--text);
+                      font-size: 0.95rem;
+                    "
+                  >
+                    Chatbot de WhatsApp
+                  </div>
+                  <div style="font-size: 0.82rem; color: var(--muted)">
+                    Sube documentos directo desde el chat
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              style="
+                margin-top: 1.8rem;
+                padding-top: 1.5rem;
+                border-top: 1px solid var(--border);
+              "
+            >
+              <p
+                style="
+                  font-size: 0.75rem;
+                  font-weight: 700;
+                  letter-spacing: 0.1em;
+                  text-transform: uppercase;
+                  color: var(--dim);
+                  margin-bottom: 1rem;
+                "
+              >
+                Alertas vía
+              </p>
+              <div style="display: flex; gap: 0.8rem; flex-wrap: wrap">
+                <span
+                  style="
+                    padding: 0.4rem 1rem;
+                    background: rgba(84, 153, 227, 0.1);
+                    border: 1px solid rgba(84, 153, 227, 0.25);
+                    border-radius: 100px;
+                    font-size: 0.82rem;
+                    color: var(--accent);
+                  "
+                  >🔔 Push Notification</span
+                >
+                <span
+                  style="
+                    padding: 0.4rem 1rem;
+                    background: rgba(74, 196, 237, 0.08);
+                    border: 1px solid rgba(74, 196, 237, 0.22);
+                    border-radius: 100px;
+                    font-size: 0.82rem;
+                    color: var(--accent2);
+                  "
+                  >💬 WhatsApp</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOTIFICACIONES -->
+    <section id="notificaciones">
+      <div class="container">
+        <div class="notif-wrap">
+          <div>
+            <div class="section-label">Alertas inteligentes</div>
+            <h2 class="section-title">Nunca más olvides<br />un vencimiento</h2>
+            <p class="section-desc" style="margin-bottom: 1.5rem">
+              Doclyfi monitorea las fechas de todos tus documentos y te avisa
+              con anticipación para que siempre estés un paso adelante.
+            </p>
+            <ul
+              style="
+                list-style: none;
+                display: flex;
+                flex-direction: column;
+                gap: 0.8rem;
+              "
+            >
+              <li
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.7rem;
+                  font-size: 0.93rem;
+                  color: var(--muted);
+                "
+              >
+                <span style="color: var(--accent); font-size: 1rem">✓</span>
+                Garantías próximas a vencer
+              </li>
+              <li
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.7rem;
+                  font-size: 0.93rem;
+                  color: var(--muted);
+                "
+              >
+                <span style="color: var(--accent); font-size: 1rem">✓</span>
+                Pagos de servicios por vencer
+              </li>
+              <li
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.7rem;
+                  font-size: 0.93rem;
+                  color: var(--muted);
+                "
+              >
+                <span style="color: var(--accent); font-size: 1rem">✓</span>
+                Contratos con vigencia próxima a terminar
+              </li>
+              <li
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.7rem;
+                  font-size: 0.93rem;
+                  color: var(--muted);
+                "
+              >
+                <span style="color: var(--accent); font-size: 1rem">✓</span>
+                Recordatorios personalizados
+              </li>
+            </ul>
+          </div>
+          <div class="notif-demo">
+            <div class="notif-card">
+              <div class="notif-icon ni-orange">⚠️</div>
+              <div class="notif-body">
+                <strong>Garantía por vencer</strong>
+                <span
+                  >Bocinas Sony · Quedan 7 días · Guarda tu comprobante</span
+                >
+              </div>
+            </div>
+            <div class="notif-card">
+              <div class="notif-icon ni-blue">💡</div>
+              <div class="notif-body">
+                <strong>Pago próximo</strong>
+                <span>Recibo de luz · $348 · Vence el viernes</span>
+              </div>
+            </div>
+            <div class="notif-card">
+              <div class="notif-icon ni-green">📑</div>
+              <div class="notif-body">
+                <strong>Contrato · 30 días restantes</strong>
+                <span>Contrato de arrendamiento · Oficina Norte</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA / LISTA DE ESPERA -->
+    <section id="lista">
+      <div class="container cta-box">
+        <h2>Sé el primero en<br /><span>usar Doclyfi</span></h2>
+        <p>
+          Únete a la lista de espera y te avisaremos cuando la app esté
+          disponible.
+        </p>
+        <div class="cta-form">
+          <input type="email" placeholder="tu@correo.com" />
+          <button type="button">Quiero acceso anticipado</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- AVISO DE PRIVACIDAD -->
+    <section id="privacidad">
+      <div class="container">
+        <div class="privacy-header">
+          <div class="section-label">Legal</div>
+          <h2 class="section-title">Aviso de Privacidad</h2>
+          <p class="section-desc">
+            En Doclyfi tu información es tuya. Aquí te explicamos con total
+            transparencia cómo la tratamos.
+          </p>
+        </div>
+
+        <div class="privacy-grid">
+          <!-- Índice -->
+          <aside class="privacy-nav">
+            <p>Índice</p>
+            <ul>
+              <li><a href="#p1">1. Responsable</a></li>
+              <li><a href="#p2">2. Datos recopilados</a></li>
+              <li><a href="#p3">3. Finalidades</a></li>
+              <li><a href="#p4">4. Uso de tecnologías</a></li>
+              <li><a href="#p5">5. Acceso a la información</a></li>
+              <li><a href="#p6">6. Transferencia de datos</a></li>
+              <li><a href="#p7">7. Seguridad</a></li>
+              <li><a href="#p8">8. Derechos ARCO</a></li>
+              <li><a href="#p9">9. Uso de WhatsApp</a></li>
+              <li><a href="#p10">10. Conservación de datos</a></li>
+              <li><a href="#p11">11. Cambios al aviso</a></li>
+              <li><a href="#p12">12. Consentimiento</a></li>
+            </ul>
+          </aside>
+
+          <!-- Contenido -->
+          <div class="privacy-content">
+            <div class="priv-section" id="p1">
+              <h3><span class="priv-num">01</span> Responsable</h3>
+              <p>
+                Doclyfi es responsable del tratamiento de sus datos personales.
+              </p>
+              <div class="priv-address">
+                Av. Paseo Royal Country 4650<br />
+                Puerta de Hierro, Zapopan, Jalisco<br />
+                México
+              </div>
+            </div>
+
+            <div class="priv-section" id="p2">
+              <h3>
+                <span class="priv-num">02</span> Datos personales recopilados
+              </h3>
+              <p>Se podrán recopilar los siguientes datos:</p>
+
+              <div class="sub-group">
+                <div class="sub-label">Datos de identificación</div>
+                <ul>
+                  <li>Nombre</li>
+                  <li>Teléfono</li>
+                  <li>Correo electrónico</li>
+                </ul>
+              </div>
+
+              <div class="sub-group">
+                <div class="sub-label">Datos fiscales</div>
+                <ul>
+                  <li>RFC</li>
+                  <li>Domicilio fiscal</li>
+                  <li>Información de facturación</li>
+                </ul>
+              </div>
+
+              <div class="sub-group">
+                <div class="sub-label">Datos de documentos</div>
+                <ul>
+                  <li>Tickets</li>
+                  <li>Recibos</li>
+                  <li>Contratos</li>
+                  <li>Información financiera contenida en ellos</li>
+                </ul>
+              </div>
+
+              <div class="sub-group">
+                <div class="sub-label">Datos de uso</div>
+                <ul>
+                  <li>Interacción con la app</li>
+                  <li>Fechas y comportamiento</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="priv-section" id="p3">
+              <h3>
+                <span class="priv-num">03</span> Finalidades del tratamiento
+              </h3>
+
+              <div class="sub-group">
+                <div class="sub-label">Finalidades primarias</div>
+                <ul>
+                  <li>Crear y administrar cuentas</li>
+                  <li>Almacenar documentos</li>
+                  <li>Procesar información mediante OCR</li>
+                  <li>Generar recordatorios y alertas</li>
+                  <li>Generar resúmenes financieros</li>
+                </ul>
+              </div>
+
+              <div class="sub-group">
+                <div class="sub-label">Finalidades secundarias</div>
+                <ul>
+                  <li>Mejorar el servicio</li>
+                  <li>Analítica</li>
+                  <li>Comunicación con el usuario</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="priv-section" id="p4">
+              <h3>
+                <span class="priv-num">04</span> Uso de tecnologías (OCR y
+                automatización)
+              </h3>
+              <p>
+                Doclyfi utiliza tecnologías de reconocimiento óptico de
+                caracteres (OCR) y procesamiento automatizado.
+              </p>
+              <div class="priv-highlight">
+                Estos procesos pueden tener errores y generar estimaciones. No
+                reemplazan la revisión manual del usuario.
+              </div>
+            </div>
+
+            <div class="priv-section" id="p5">
+              <h3><span class="priv-num">05</span> Acceso a la información</h3>
+              <p>Doclyfi declara que:</p>
+              <ul>
+                <li>No accede manualmente a los documentos.</li>
+                <li>No analiza contenido de forma humana.</li>
+                <li>El procesamiento es completamente automatizado.</li>
+              </ul>
+            </div>
+
+            <div class="priv-section" id="p6">
+              <h3><span class="priv-num">06</span> Transferencia de datos</h3>
+              <p>
+                Doclyfi podrá compartir datos con proveedores tecnológicos,
+                servicios de nube y plataformas como WhatsApp, siempre bajo
+                medidas de seguridad.
+              </p>
+              <div class="priv-highlight">
+                Los datos personales no serán vendidos bajo ninguna
+                circunstancia.
+              </div>
+            </div>
+
+            <div class="priv-section" id="p7">
+              <h3><span class="priv-num">07</span> Seguridad</h3>
+              <p>
+                Doclyfi implementa medidas técnicas razonables para proteger tu
+                información:
+              </p>
+              <ul>
+                <li>Cifrado de datos</li>
+                <li>Controles de acceso</li>
+                <li>Medidas técnicas razonables de protección</li>
+              </ul>
+            </div>
+
+            <div class="priv-section" id="p8">
+              <h3><span class="priv-num">08</span> Derechos ARCO</h3>
+              <p>
+                El usuario puede ejercer sus derechos de Acceso, Rectificación,
+                Cancelación y Oposición en cualquier momento mediante solicitud
+                a:
+              </p>
+              <a href="mailto:contacto@doclyfi.com" class="priv-contact"
+                >✉️ contacto@doclyfi.com</a
+              >
+            </div>
+
+            <div class="priv-section" id="p9">
+              <h3><span class="priv-num">09</span> Uso de WhatsApp</h3>
+              <p>
+                Al usar WhatsApp como canal de comunicación con Doclyfi, el
+                usuario acepta las políticas de dicha plataforma. Doclyfi no
+                controla ni es responsable de la infraestructura de WhatsApp.
+              </p>
+            </div>
+
+            <div class="priv-section" id="p10">
+              <h3><span class="priv-num">10</span> Conservación de datos</h3>
+              <p>Los datos personales se conservarán mientras:</p>
+              <ul>
+                <li>Exista una relación activa con el usuario.</li>
+                <li>Sea necesario para la prestación del servicio.</li>
+              </ul>
+            </div>
+
+            <div class="priv-section" id="p11">
+              <h3><span class="priv-num">11</span> Cambios al aviso</h3>
+              <p>
+                Doclyfi puede modificar este aviso de privacidad en cualquier
+                momento. Se recomienda al usuario revisar periódicamente este
+                documento para estar al tanto de cualquier actualización.
+              </p>
+            </div>
+
+            <div class="priv-section" id="p12">
+              <h3><span class="priv-num">12</span> Consentimiento</h3>
+              <div class="priv-highlight">
+                Al usar Doclyfi, el usuario acepta los términos descritos en
+                este aviso de privacidad.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-inner">
+        <a href="#inicio" class="footer-logo">Docl<span>yfi</span></a>
+        <div class="footer-links">
+          <a href="#funciones">Funciones</a>
+          <a href="#como-funciona">Cómo funciona</a>
+          <a href="#notificaciones">Alertas</a>
+          <a href="#lista">Lista de espera</a>
+          <a href="#privacidad">Privacidad</a>
+          <a href="mailto:contacto@doclyfi.com">Contacto</a>
+        </div>
+        <p class="footer-copy">© 2026 Doclyfi · Zapopan, Jalisco, México</p>
+      </div>
+    </footer>
+  </body>
+</html>
