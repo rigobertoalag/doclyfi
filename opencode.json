@@ -1,0 +1,19 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["opencode-codegraph"],
+  "instructions": [
+    ".codegraph/AGENTS.md",
+    ".codegraph/SCENARIO_PLAYBOOK.md"
+  ],
+  "mcp": {
+    "doclyfi-files": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/rigoalag/doclyfi-app"
+      ]
+    }
+  }
+}
