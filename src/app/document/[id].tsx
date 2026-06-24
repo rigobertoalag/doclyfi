@@ -1,23 +1,24 @@
-import { MOCK_DOCUMENTS } from '@/mocks/documents';
+import { CaptureHeader } from '@/components/capture/CaptureHeader';
+import { useDocumentDetail } from '@/hooks/useDocumentDetail';
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+    ActivityIndicator,
     Alert, Platform, ScrollView, StyleSheet,
     Text, TouchableOpacity, View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-type DocStatus   = 'active' | 'expiring' | 'expired' | 'paid' | 'pending' | 'processed';
+type DocStatus = 'active' | 'expiring' | 'expired' | 'paid' | 'pending' | 'processed';
 type DocCategory = 'warranty' | 'invoice' | 'deposit' | 'services' | 'contracts';
-type FileType    = 'PDF' | 'IMG' | 'DOC' | 'XLS';
+type FileType = 'PDF' | 'IMG' | 'DOC' | 'XLS';
 
 type LinkedDoc = {
-    id:        string;
-    name:      string;
-    subtitle:  string;
+    id: string;
+    name: string;
+    subtitle: string;
     isPrimary: boolean;
     thumbnail?: string;
 };
@@ -26,27 +27,27 @@ type LinkedDoc = {
 const CATEGORY_CONFIG: Record<DocCategory, {
     label: string; icon: string; color: string; bg: string; border: string;
 }> = {
-    warranty:  { label: 'Compras c/Garantía', icon: 'shield-checkmark-outline', color: '#3B7BFF', bg: '#EFF6FF', border: '#BFDBFE' },
-    invoice:   { label: 'Archivado',          icon: 'documents-outline',         color: '#C2410C', bg: '#FFF7ED', border: '#FED7AA' },
-    deposit:   { label: 'Depósitos',          icon: 'arrow-down-circle-outline', color: '#7C3AED', bg: '#FDF4FF', border: '#E9D5FF' },
-    services:  { label: 'Servicios',          icon: 'flash-outline',             color: '#0EA5E9', bg: '#F0F9FF', border: '#BAE6FD' },
-    contracts: { label: 'Contratos',          icon: 'document-text-outline',     color: '#0D9488', bg: '#F0FDFA', border: '#99F6E4' },
+    warranty: { label: 'Compras c/Garantía', icon: 'shield-checkmark-outline', color: '#3B7BFF', bg: '#EFF6FF', border: '#BFDBFE' },
+    invoice: { label: 'Archivado', icon: 'documents-outline', color: '#C2410C', bg: '#FFF7ED', border: '#FED7AA' },
+    deposit: { label: 'Depósitos', icon: 'arrow-down-circle-outline', color: '#7C3AED', bg: '#FDF4FF', border: '#E9D5FF' },
+    services: { label: 'Servicios', icon: 'flash-outline', color: '#0EA5E9', bg: '#F0F9FF', border: '#BAE6FD' },
+    contracts: { label: 'Contratos', icon: 'document-text-outline', color: '#0D9488', bg: '#F0FDFA', border: '#99F6E4' },
 };
 
 const STATUS_CONFIG: Record<DocStatus, { label: string; color: string; bg: string }> = {
-    active:    { label: 'Activo',          color: '#FFFFFF', bg: '#0D9488' },
-    expiring:  { label: 'Por Vencer',      color: '#FFFFFF', bg: '#D97706' },
-    expired:   { label: 'Vencido',         color: '#FFFFFF', bg: '#DC2626' },
-    paid:      { label: 'Pago Realizado',  color: '#FFFFFF', bg: '#16A34A' },
-    pending:   { label: 'Pendiente',       color: '#FFFFFF', bg: '#F59E0B' },
-    processed: { label: 'Procesado',       color: '#FFFFFF', bg: '#3B7BFF' },
+    active: { label: 'Activo', color: '#FFFFFF', bg: '#0D9488' },
+    expiring: { label: 'Por Vencer', color: '#FFFFFF', bg: '#D97706' },
+    expired: { label: 'Vencido', color: '#FFFFFF', bg: '#DC2626' },
+    paid: { label: 'Pago Realizado', color: '#FFFFFF', bg: '#16A34A' },
+    pending: { label: 'Pendiente', color: '#FFFFFF', bg: '#F59E0B' },
+    processed: { label: 'Procesado', color: '#FFFFFF', bg: '#3B7BFF' },
 };
 
 const FILE_TYPE_CONFIG: Record<FileType, { color: string; bg: string; icon: string }> = {
     PDF: { color: '#DC2626', bg: '#FEF2F2', icon: 'document-outline' },
-    IMG: { color: '#7C3AED', bg: '#FDF4FF', icon: 'image-outline'    },
+    IMG: { color: '#7C3AED', bg: '#FDF4FF', icon: 'image-outline' },
     DOC: { color: '#2563EB', bg: '#EFF6FF', icon: 'document-outline' },
-    XLS: { color: '#16A34A', bg: '#F0FDF4', icon: 'grid-outline'     },
+    XLS: { color: '#16A34A', bg: '#F0FDF4', icon: 'grid-outline' },
 };
 
 
@@ -54,13 +55,57 @@ const FILE_TYPE_CONFIG: Record<FileType, { color: string; bg: string; icon: stri
 // ─── Screen ───────────────────────────────────────────────────────────────────
 export default function DocumentDetailScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
-    const doc = MOCK_DOCUMENTS[id ?? 'd11'] ?? MOCK_DOCUMENTS['d11'];
 
-    const cat    = CATEGORY_CONFIG[doc.category];
-    const status = STATUS_CONFIG[doc.status];
-    const file   = FILE_TYPE_CONFIG[doc.fileType];
+    // ── Fuente de datos real — reemplaza MOCK_DOCUMENTS ───────
+    const { data: doc, loading, error } = useDocumentDetail(id ?? '');
 
-    const [linkedDocs, setLinkedDocs] = useState(doc.linkedDocs);
+    // ── useState SIEMPRE antes de cualquier return condicional ─
+    const [linkedDocs, setLinkedDocs] = useState<typeof doc extends null ? [] : typeof doc['linkedDocs']>([]);
+
+    // Sincronizar linkedDocs cuando lleguen los datos
+    useEffect(() => {
+        if (doc?.linkedDocs) {
+            setLinkedDocs(doc.linkedDocs);
+        }
+    }, [doc?.linkedDocs]);
+
+    // ── Estado de carga ───────────────────────────────────────
+    if (loading) {
+        return (
+            <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+                <CaptureHeader onBack={() => router.dismiss()} />
+                <View style={styles.loadingWrap}>
+                    <ActivityIndicator size="large" color="#3B7BFF" />
+                    <Text style={styles.loadingText}>Cargando documento...</Text>
+                </View>
+            </SafeAreaView>
+        );
+    }
+
+    // ── Error o no encontrado ─────────────────────────────────
+    if (error || !doc) {
+        return (
+            <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+                <CaptureHeader onBack={() => router.dismiss()} />
+                <View style={styles.loadingWrap}>
+                    <Ionicons name="cloud-offline-outline" size={40} color="#CBD5E1" />
+                    <Text style={styles.errorTitle}>
+                        {error === 'DOCUMENT_NOT_FOUND'
+                            ? 'Documento no encontrado'
+                            : 'No se pudo cargar el documento'}
+                    </Text>
+                    <TouchableOpacity onPress={() => router.dismiss()}>
+                        <Text style={styles.errorBack}>Volver a documentos</Text>
+                    </TouchableOpacity>
+                </View>
+            </SafeAreaView>
+        );
+    }
+
+    // ── A partir de aquí todo igual que antes ─────────────────
+    const cat = CATEGORY_CONFIG[doc.category as DocCategory];
+    const status = STATUS_CONFIG[doc.status as DocStatus];
+    const file = FILE_TYPE_CONFIG[doc.fileType as FileType];
 
     const handleUnlink = (docId: string) => {
         Alert.alert('Desvincular', '¿Deseas desvincular este documento?', [
@@ -74,46 +119,13 @@ export default function DocumentDetailScreen() {
     };
 
     const handleLinkNew = () => {
-        // TODO: abrir selector de documentos
         router.push({ pathname: '/document/LinkDocument', params: { sourceId: doc.id } });
     };
 
     return (
         <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
 
-            {/* ── Header ─────────────────────────────────────────── */}
-            <View style={styles.header}>
-                <TouchableOpacity
-                    style={styles.hdrBtn}
-                    onPress={() => router.dismiss()}
-                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                >
-                    <Ionicons
-                        name={Platform.OS === 'ios' ? 'chevron-back' : 'arrow-back'}
-                        size={Platform.OS === 'ios' ? 20 : 22}
-                        color="#475569"
-                    />
-                    {Platform.OS === 'ios' && <Text style={styles.hdrBackLabel}>Volver</Text>}
-                </TouchableOpacity>
-
-                <View style={styles.logoAbsolute} pointerEvents="none">
-                    <Image
-                        source={require('@/assets/doclyfi_images/logo_no_background.png')}
-                        style={styles.logoImg}
-                        contentFit="contain"
-                    />
-                </View>
-
-                {/* Actions */}
-                <View style={styles.hdrRight}>
-                    <TouchableOpacity style={styles.hdrIconBtn}>
-                        <Ionicons name="share-outline" size={18} color="#475569" />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.hdrIconBtn}>
-                        <Ionicons name="ellipsis-horizontal" size={18} color="#475569" />
-                    </TouchableOpacity>
-                </View>
-            </View>
+            <CaptureHeader onBack={() => router.dismiss()} />
 
             <ScrollView
                 contentContainerStyle={styles.scrollContent}
@@ -154,10 +166,10 @@ export default function DocumentDetailScreen() {
 
                     {/* Quick actions */}
                     <View style={styles.quickActions}>
-                        <QuickAction icon="eye-outline"       label="Ver archivo"  color={cat.color} />
-                        <QuickAction icon="download-outline"  label="Descargar"    color={cat.color} />
-                        <QuickAction icon="pencil-outline"    label="Editar"       color={cat.color} />
-                        <QuickAction icon="trash-outline"     label="Eliminar"     color="#EF4444"   />
+                        <QuickAction icon="eye-outline" label="Ver archivo" color={cat.color} />
+                        <QuickAction icon="download-outline" label="Descargar" color={cat.color} />
+                        <QuickAction icon="pencil-outline" label="Editar" color={cat.color} />
+                        <QuickAction icon="trash-outline" label="Eliminar" color="#EF4444" />
                     </View>
                 </View>
 
@@ -258,9 +270,9 @@ export default function DocumentDetailScreen() {
                     <Text style={styles.sectionLabel}>ACTIVIDAD</Text>
                     <View style={styles.timeline}>
                         {[
-                            { icon: 'scan-outline',           color: '#3B7BFF', label: 'Documento escaneado con OCR',     date: doc.date       },
-                            { icon: 'checkmark-circle-outline', color: '#16A34A', label: 'Datos verificados y guardados',   date: doc.date       },
-                            { icon: 'link-outline',            color: '#7C3AED', label: `${linkedDocs.length} documentos vinculados`, date: doc.date },
+                            { icon: 'scan-outline', color: '#3B7BFF', label: 'Documento escaneado con OCR', date: doc.date },
+                            { icon: 'checkmark-circle-outline', color: '#16A34A', label: 'Datos verificados y guardados', date: doc.date },
+                            { icon: 'link-outline', color: '#7C3AED', label: `${linkedDocs.length} documentos vinculados`, date: doc.date },
                         ].map((event, idx, arr) => (
                             <View key={idx} style={styles.timelineRow}>
                                 <View style={styles.timelineLeft}>
@@ -378,29 +390,6 @@ const CARD_SHADOW = Platform.select({
 const styles = StyleSheet.create({
     safe: { flex: 1, backgroundColor: '#F8FAFF' },
     scrollContent: { padding: 16, gap: 12 },
-
-    // Header
-    header: {
-        flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-        paddingHorizontal: 16, paddingVertical: 10,
-        backgroundColor: '#F8FAFF', borderBottomWidth: 1, borderBottomColor: '#E0E2E4',
-        position: 'relative',
-    },
-    hdrBtn: {
-        flexDirection: 'row', alignItems: 'center', gap: 2, minWidth: 70,
-        paddingVertical: 4, paddingHorizontal: Platform.OS === 'ios' ? 0 : 6,
-        borderRadius: Platform.OS === 'ios' ? 0 : 8,
-        backgroundColor: Platform.OS === 'ios' ? 'transparent' : '#F8FAFF',
-        borderWidth: Platform.OS === 'ios' ? 0 : 1, borderColor: '#E2E8F0',
-    },
-    hdrBackLabel: { fontSize: 16, color: '#475569', fontWeight: '400' },
-    logoAbsolute: { position: 'absolute', left: 0, right: 0, alignItems: 'center', justifyContent: 'center' },
-    logoImg: { height: 45, width: 110 },
-    hdrRight: { flexDirection: 'row', gap: 6 },
-    hdrIconBtn: {
-        width: 34, height: 34, borderRadius: 10, backgroundColor: '#FFFFFF',
-        borderWidth: 1, borderColor: '#E2E8F0', alignItems: 'center', justifyContent: 'center',
-    },
 
     // Header card
     headerCard: {
@@ -530,4 +519,27 @@ const styles = StyleSheet.create({
         flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10,
     },
     ctaBtnText: { fontSize: 15, fontWeight: '700', color: '#FFFFFF', letterSpacing: -0.2 },
+    loadingWrap: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 12,
+    },
+    loadingText: {
+        fontSize: 14,
+        color: '#94A3B8',
+        fontWeight: '500',
+    },
+    errorTitle: {
+        fontSize: 15,
+        fontWeight: '700',
+        color: '#0F172A',
+        textAlign: 'center',
+    },
+    errorBack: {
+        fontSize: 13,
+        fontWeight: '600',
+        color: '#3B7BFF',
+        marginTop: 4,
+    },
 });
