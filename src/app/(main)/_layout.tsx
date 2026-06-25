@@ -1,6 +1,6 @@
-import { Colors } from '@/constants/colors';
+import { Colors } from '@/shared/constants/colors';
 import { Ionicons } from '@expo/vector-icons';
-import { ROUTES, router } from '@/lib/routes';
+import { ROUTES, router } from '@/shared/lib/routes';
 import { Tabs } from 'expo-router';
 import React, { useCallback, useEffect, useRef } from 'react';
 import {
