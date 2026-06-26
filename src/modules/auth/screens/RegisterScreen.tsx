@@ -12,7 +12,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { validateEmail, validateName, validatePassword } from '../../../../scripts/helpers';
@@ -20,52 +20,52 @@ import { validateEmail, validateName, validatePassword } from '../../../../scrip
 type AuthMethod = 'email' | 'phone';
 
 function useMountFade(delay = 0) {
-    const anim = useRef({
-        opacity: new Animated.Value(0),
-        translateY: new Animated.Value(20),
-    });
-    React.useEffect(() => {
-        const a = anim.current;
-        Animated.parallel([
-            Animated.timing(a.opacity, {
-                toValue: 1,
-                duration: 450,
-                delay,
-                easing: Easing.out(Easing.cubic),
-                useNativeDriver: true,
-            }),
-            Animated.timing(a.translateY, {
-                toValue: 0,
-                duration: 450,
-                delay,
-                easing: Easing.out(Easing.cubic),
-                useNativeDriver: true,
-            }),
-        ]).start();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-    return anim.current;
+  const anim = useRef({
+    opacity: new Animated.Value(0),
+    translateY: new Animated.Value(24),
+  });
+  React.useEffect(() => {
+    const a = anim.current;
+    Animated.parallel([
+      Animated.timing(a.opacity, {
+        toValue: 1,
+        duration: 500,
+        delay,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.timing(a.translateY, {
+        toValue: 0,
+        duration: 500,
+        delay,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+    ]).start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return anim.current;
 }
 
 function useShake() {
-    const shakeAnim = useRef(new Animated.Value(0)).current;
-    const shake = React.useCallback(() => {
-        Animated.sequence([
-            Animated.timing(shakeAnim, { toValue: 8, duration: 60, useNativeDriver: true }),
-            Animated.timing(shakeAnim, { toValue: -8, duration: 60, useNativeDriver: true }),
-            Animated.timing(shakeAnim, { toValue: 6, duration: 50, useNativeDriver: true }),
-            Animated.timing(shakeAnim, { toValue: -6, duration: 50, useNativeDriver: true }),
-            Animated.timing(shakeAnim, { toValue: 0, duration: 40, useNativeDriver: true }),
-        ]).start();
-    }, [shakeAnim]);
-    return { shakeAnim, shake };
+  const shakeAnim = useRef(new Animated.Value(0)).current;
+  const shake = React.useCallback(() => {
+    Animated.sequence([
+      Animated.timing(shakeAnim, { toValue: 8, duration: 60, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: -8, duration: 60, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: 6, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: -6, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: 0, duration: 40, useNativeDriver: true }),
+    ]).start();
+  }, [shakeAnim]);
+  return { shakeAnim, shake };
 }
 
 function usePressScale() {
-    const scale = useRef(new Animated.Value(1)).current;
-    const pressIn = React.useCallback(() => Animated.spring(scale, { toValue: 0.97, useNativeDriver: true }).start(), [scale]);
-    const pressOut = React.useCallback(() => Animated.spring(scale, { toValue: 1, useNativeDriver: true }).start(), [scale]);
-    return { scale, pressIn, pressOut };
+  const scale = useRef(new Animated.Value(1)).current;
+  const pressIn = React.useCallback(() => Animated.spring(scale, { toValue: 0.97, useNativeDriver: true }).start(), [scale]);
+  const pressOut = React.useCallback(() => Animated.spring(scale, { toValue: 1, useNativeDriver: true }).start(), [scale]);
+  return { scale, pressIn, pressOut };
 }
 
 export default function RegisterScreen() {
@@ -77,11 +77,9 @@ export default function RegisterScreen() {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
-  const backAnim = useMountFade(50);
-  const brandAnim = useMountFade(100);
-  const cardAnim = useMountFade(200);
-  const infoAnim = useMountFade(450);
-  const switchAnim = useMountFade(500);
+  const brandAnim = useMountFade(50);
+  const cardAnim = useMountFade(250);
+  const switchAnim = useMountFade(600);
 
   const errShake = useShake();
   const btnScale = usePressScale();
@@ -143,30 +141,22 @@ export default function RegisterScreen() {
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-          <ScrollView
-            contentContainerStyle={[form.scroll, { paddingTop: 16 }]}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-          >
-          {/* Back */}
-          <Animated.View style={{ opacity: backAnim.opacity, transform: [{ translateY: backAnim.translateY }] }}>
-            <TouchableOpacity
-              style={form.backBtn}
-              onPress={() => router.back()}
-            >
-              <Ionicons name="chevron-back" size={18} color="#475569" />
-              <Text style={form.backText}>Iniciar sesión</Text>
-            </TouchableOpacity>
-          </Animated.View>
-
-          {/* Logo */}
-          <Animated.View style={[styles.brandSection, { opacity: brandAnim.opacity, transform: [{ translateY: brandAnim.translateY }] }]}>
+        <ScrollView
+          contentContainerStyle={[form.scroll, { paddingTop: 20 }]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Logo + hero */}
+          <Animated.View style={[styles.heroSection, { opacity: brandAnim.opacity, transform: [{ translateY: brandAnim.translateY }] }]}>
             <Image
               source={require('@/assets/doclyfi_images/logo_no_background.png')}
               style={styles.logo}
               contentFit="contain"
             />
-            <Text style={styles.tagline}>Crea tu cuenta gratis</Text>
+            <Text style={styles.heroTitle}>Crear cuenta gratuita</Text>
+            <Text style={styles.heroSub}>
+              Organiza tus garantías, facturas, contratos y más en un solo lugar
+            </Text>
           </Animated.View>
 
           {/* Error general */}
@@ -178,28 +168,25 @@ export default function RegisterScreen() {
           )}
 
           {/* Card */}
-          <Animated.View style={[form.card, { gap: 14, marginBottom: 14, opacity: cardAnim.opacity, transform: [{ translateY: cardAnim.translateY }] }]}>
+          <Animated.View style={[styles.card, { opacity: cardAnim.opacity, transform: [{ translateY: cardAnim.translateY }] }]}>
 
             {/* Nombre */}
             <View style={styles.field}>
-              <Text style={form.fieldLabel}>Nombre completo</Text>
-              <View style={[form.inputRow, errors.name && form.inputRowError]}>
-                <Ionicons name="person-outline" size={17} color="#94A3B8" />
-                <Input
-                  style={styles.input}
-                  value={name}
-                  onChangeText={setName}
-                  placeholder="Tu nombre completo"
-                  autoComplete="name"
-                  returnKeyType="next"
-                />
-              </View>
-              {errors.name && <Animated.View style={{ transform: [{ translateX: errShake.shakeAnim }] }}><Text style={form.fieldError}>{errors.name}</Text></Animated.View>}
+              <Text style={styles.fieldLabel}>Nombre completo</Text>
+              <Input
+                value={name}
+                onChangeText={setName}
+                placeholder="Tu nombre completo"
+                autoComplete="name"
+                returnKeyType="next"
+                leftIcon={<Ionicons name="person-outline" size={18} color="#94A3B8" />}
+                error={errors.name || null}
+              />
             </View>
 
             {/* Method toggle */}
             <View style={styles.field}>
-              <Text style={form.fieldLabel}>Método de registro</Text>
+              <Text style={styles.fieldLabel}>Método de registro</Text>
               <View style={styles.methodToggle}>
                 <TouchableOpacity
                   style={[styles.methodBtn, method === 'email' && styles.methodBtnActive]}
@@ -240,27 +227,26 @@ export default function RegisterScreen() {
 
             {/* Email o Teléfono */}
             <View style={styles.field}>
-              <Text style={form.fieldLabel}>
+              <Text style={styles.fieldLabel}>
                 {method === 'email' ? 'Correo electrónico' : 'Número de teléfono'}
               </Text>
-              <View style={[form.inputRow, errors.contact && form.inputRowError]}>
-                <Ionicons
-                  name={method === 'email' ? 'mail-outline' : 'call-outline'}
-                  size={17}
-                  color="#94A3B8"
-                />
-                <Input
-                  style={styles.input}
-                  value={contact}
-                  onChangeText={setContact}
-                  placeholder={method === 'email' ? 'tu@correo.com' : '+52 55 1234 5678'}
-                  keyboardType={method === 'email' ? 'email-address' : 'phone-pad'}
-                  autoCapitalize="none"
-                  autoComplete={method === 'email' ? 'email' : 'tel'}
-                  returnKeyType="next"
-                />
-              </View>
-              {errors.contact && <Animated.View style={{ transform: [{ translateX: errShake.shakeAnim }] }}><Text style={form.fieldError}>{errors.contact}</Text></Animated.View>}
+              <Input
+                value={contact}
+                onChangeText={setContact}
+                placeholder={method === 'email' ? 'tu@correo.com' : '+52 55 1234 5678'}
+                keyboardType={method === 'email' ? 'email-address' : 'phone-pad'}
+                autoCapitalize="none"
+                autoComplete={method === 'email' ? 'email' : 'tel'}
+                returnKeyType="next"
+                leftIcon={
+                  <Ionicons
+                    name={method === 'email' ? 'mail-outline' : 'call-outline'}
+                    size={18}
+                    color="#94A3B8"
+                  />
+                }
+                error={errors.contact || null}
+              />
               {method === 'phone' && (
                 <Text style={styles.fieldHint}>
                   Te enviaremos un código de verificación por SMS
@@ -270,37 +256,31 @@ export default function RegisterScreen() {
 
             {/* Contraseña */}
             <View style={styles.field}>
-              <Text style={form.fieldLabel}>Contraseña</Text>
-              <View style={[form.inputRow, errors.password && form.inputRowError]}>
-                <Ionicons name="lock-closed-outline" size={17} color="#94A3B8" />
-                <Input
-                  style={styles.input}
-                  value={password}
-                  onChangeText={setPassword}
-                  placeholder="Mínimo 6 caracteres"
-                  isPassword
-                  returnKeyType="next"
-                />
-              </View>
-              {errors.password && <Animated.View style={{ transform: [{ translateX: errShake.shakeAnim }] }}><Text style={form.fieldError}>{errors.password}</Text></Animated.View>}
+              <Text style={styles.fieldLabel}>Contraseña</Text>
+              <Input
+                value={password}
+                onChangeText={setPassword}
+                placeholder="Mínimo 6 caracteres"
+                isPassword
+                returnKeyType="next"
+                leftIcon={<Ionicons name="lock-closed-outline" size={18} color="#94A3B8" />}
+                error={errors.password || null}
+              />
             </View>
 
             {/* Confirmar */}
             <View style={styles.field}>
-              <Text style={form.fieldLabel}>Confirmar contraseña</Text>
-              <View style={[form.inputRow, errors.confirm && form.inputRowError]}>
-                <Ionicons name="lock-closed-outline" size={17} color="#94A3B8" />
-                <Input
-                  style={styles.input}
-                  value={confirm}
-                  onChangeText={setConfirm}
-                  placeholder="Repite la contraseña"
-                  isPassword
-                  returnKeyType="done"
-                  onSubmitEditing={handleRegister}
-                />
-              </View>
-              {errors.confirm && <Animated.View style={{ transform: [{ translateX: errShake.shakeAnim }] }}><Text style={form.fieldError}>{errors.confirm}</Text></Animated.View>}
+              <Text style={styles.fieldLabel}>Confirmar contraseña</Text>
+              <Input
+                value={confirm}
+                onChangeText={setConfirm}
+                placeholder="Repite la contraseña"
+                isPassword
+                returnKeyType="done"
+                onSubmitEditing={handleRegister}
+                leftIcon={<Ionicons name="lock-closed-outline" size={18} color="#94A3B8" />}
+                error={errors.confirm || null}
+              />
             </View>
 
             {/* Términos */}
@@ -309,9 +289,11 @@ export default function RegisterScreen() {
               onPress={() => setAcceptTerms(v => !v)}
               activeOpacity={0.7}
             >
-              <View style={[styles.termsCheck, acceptTerms && styles.termsCheckActive]}>
-                {acceptTerms && <Ionicons name="checkmark" size={12} color="#FFF" />}
-              </View>
+              <Animated.View style={[styles.termsCheck, acceptTerms && styles.termsCheckActive]}>
+                {acceptTerms && (
+                  <Ionicons name="checkmark" size={13} color="#FFF" />
+                )}
+              </Animated.View>
               <Text style={styles.termsText}>
                 Acepto los{' '}
                 <Text style={styles.termsLink}>Términos de Servicio</Text>
@@ -319,9 +301,13 @@ export default function RegisterScreen() {
                 <Text style={styles.termsLink}>Política de Privacidad</Text>
               </Text>
             </TouchableOpacity>
-            {errors.terms && <Animated.View style={{ transform: [{ translateX: errShake.shakeAnim }] }}><Text style={form.fieldError}>{errors.terms}</Text></Animated.View>}
+            {errors.terms && (
+              <Animated.View style={{ transform: [{ translateX: errShake.shakeAnim }] }}>
+                <Text style={styles.termsError}>{errors.terms}</Text>
+              </Animated.View>
+            )}
 
-            <Animated.View style={{ transform: [{ scale: btnScale.scale }] }}>
+            <Animated.View style={{ transform: [{ scale: btnScale.scale }], marginTop: 4 }}>
               <Button
                 label={method === 'phone' ? 'Continuar — Verificar número' : 'Crear mi cuenta'}
                 variant="primary"
@@ -331,25 +317,15 @@ export default function RegisterScreen() {
                 onPressIn={btnScale.pressIn}
                 onPressOut={btnScale.pressOut}
                 onPress={handleRegister}
-                style={{ marginTop: 4 }}
               />
             </Animated.View>
           </Animated.View>
 
-          {/* Info de datos futuros */}
-          <Animated.View style={[alertBanner.info, { opacity: infoAnim.opacity, transform: [{ translateY: infoAnim.translateY }] }]}>
-            <Ionicons name="information-circle-outline" size={16} color="#3B7BFF" />
-            <Text style={styles.infoCardText}>
-              Podrás agregar datos fiscales, información de tu contador y preferencias
-              de facturación desde tu perfil, cuando los necesites.
-            </Text>
-          </Animated.View>
-
           {/* Switch to login */}
-          <Animated.View style={[form.switchRow, { opacity: switchAnim.opacity }]}>
-            <Text style={form.switchText}>¿Ya tienes cuenta? </Text>
+          <Animated.View style={[styles.switchRow, { opacity: switchAnim.opacity }]}>
+            <Text style={styles.switchText}>¿Ya tienes cuenta? </Text>
             <TouchableOpacity onPress={() => router.back()}>
-              <Text style={form.switchLink}>Iniciar sesión</Text>
+              <Text style={styles.switchLink}>Iniciar sesión</Text>
             </TouchableOpacity>
           </Animated.View>
         </ScrollView>
@@ -359,29 +335,65 @@ export default function RegisterScreen() {
 }
 
 const styles = StyleSheet.create({
-  brandSection: { alignItems: 'center', marginBottom: 24 },
-  logo: { width: 160, height: 50, marginBottom: 8 },
-  tagline: { fontSize: 13, color: '#94A3B8' },
+  card: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    padding: 20,
+    gap: 16,
+    marginBottom: 20,
+    ...Platform.select({
+      ios: {
+        shadowColor: 'rgba(59,123,255,0.08)',
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 1,
+        shadowRadius: 24,
+      },
+      android: { elevation: 4 },
+    }),
+  },
+
+  heroSection: { alignItems: 'center', marginBottom: 28 },
+  logo: { width: 180, height: 56, marginBottom: 12 },
+  heroTitle: { fontSize: 20, fontWeight: '800', color: '#0F172A', marginBottom: 6, letterSpacing: -0.3 },
+  heroSub: { fontSize: 13, color: '#94A3B8', textAlign: 'center', lineHeight: 18, paddingHorizontal: 16 },
 
   errorBannerText: { flex: 1, color: '#DC2626', fontSize: 13, fontWeight: '500' },
 
   field: { gap: 6 },
-  input: { flex: 1, borderWidth: 0, backgroundColor: 'transparent', paddingLeft: 0 },
-  fieldHint: { fontSize: 11, color: '#94A3B8' },
+  fieldLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#64748B',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  fieldHint: { fontSize: 11, color: '#94A3B8', marginTop: 2 },
 
   methodToggle: {
-    flexDirection: 'row', backgroundColor: '#F1F5F9',
-    borderRadius: 12, padding: 3, gap: 3,
+    flexDirection: 'row',
+    backgroundColor: '#F1F5F9',
+    borderRadius: 14,
+    padding: 3,
+    gap: 3,
   },
   methodBtn: {
-    flex: 1, flexDirection: 'row', alignItems: 'center',
-    justifyContent: 'center', gap: 6,
-    paddingVertical: 10, borderRadius: 10,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 11,
+    borderRadius: 11,
   },
   methodBtnActive: {
     backgroundColor: '#FFFFFF',
     ...Platform.select({
-      ios: { shadowColor: 'rgba(59,123,255,0.1)', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 1, shadowRadius: 6 },
+      ios: {
+        shadowColor: 'rgba(59,123,255,0.1)',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 1,
+        shadowRadius: 6,
+      },
       android: { elevation: 2 },
     }),
   },
@@ -390,13 +402,28 @@ const styles = StyleSheet.create({
 
   termsRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 10 },
   termsCheck: {
-    width: 20, height: 20, borderRadius: 6, borderWidth: 2,
-    borderColor: '#E2E8F0', backgroundColor: '#FFF',
-    alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1,
+    width: 22,
+    height: 22,
+    borderRadius: 7,
+    borderWidth: 2,
+    borderColor: '#E2E8F0',
+    backgroundColor: '#FFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+    marginTop: 1,
   },
   termsCheckActive: { backgroundColor: '#3B7BFF', borderColor: '#3B7BFF' },
   termsText: { flex: 1, fontSize: 13, color: '#64748B', lineHeight: 18 },
   termsLink: { color: '#3B7BFF', fontWeight: '600', textDecorationLine: 'underline' },
+  termsError: { fontSize: 11, color: '#DC2626', fontWeight: '500' },
 
-  infoCardText: { flex: 1, fontSize: 12, color: '#3B7BFF', lineHeight: 17, fontWeight: '400' },
+  switchRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 8,
+  },
+  switchText: { fontSize: 14, color: '#64748B' },
+  switchLink: { fontSize: 14, color: '#3B7BFF', fontWeight: '700' },
 });

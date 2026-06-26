@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
     Platform, ScrollView, StyleSheet,
-    Text, TextInput, TouchableOpacity, View,
+    Text, TouchableOpacity, View,
 } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -30,41 +30,25 @@ type SortOption = typeof SORT_OPTIONS[number];
 
 // ─── Screen ───────────────────────────────────────────────────────────────────
 export default function DocumentsScreen() {
-    const [search, setSearch] = useState('');
     const [activeCategory, setActiveCategory] = useState<CategoryId>('all');
     const [sortBy, setSortBy] = useState<SortOption>('Más recientes');
     const [showSort, setShowSort] = useState(false);
-    const [aiMode, setAiMode] = useState(false);
     const aiSearch = useAISearch();
 
     const activeCat = CATEGORIES.find(c => c.id === activeCategory)!;
 
-    // const filtered = ALL_DOCS.filter(doc => {
-    //     const matchCat = activeCategory === 'all' || doc.categoryId === activeCategory;
-    //     const matchSearch = !search.trim() ||
-    //         doc.name.toLowerCase().includes(search.toLowerCase()) ||
-    //         doc.provider.toLowerCase().includes(search.toLowerCase());
-    //     return matchCat && matchSearch;
-    // });
-
-    // // Group by category when "Todos" is selected
-    // const grouped = CATEGORIES.filter(c => c.id !== 'all').map(cat => ({
-    //     category: cat,
-    //     docs: filtered.filter(d => d.categoryId === cat.id),
-    // })).filter(g => g.docs.length > 0);
-
-    // const totalCount = ALL_DOCS.length;
-
-    const { data, loading, error, reload } = useDocuments(activeCategory, sortBy, search);
+    const { data, loading, reload } = useDocuments(activeCategory, sortBy, '');
 
     const docs = data?.docs ?? [];
     const totals = data?.totals ?? {};
-    const filtered = docs; // ya viene filtrado y ordenado desde n8n
+    const filtered = docs;
 
     const grouped = CATEGORIES.filter(c => c.id !== 'all').map(cat => ({
         category: cat,
         docs: filtered.filter(d => d.categoryId === cat.id),
     })).filter(g => g.docs.length > 0);
+
+    const isSearching = aiSearch.query.length >= 3;
 
     return (
         <Animated.View
@@ -105,47 +89,15 @@ export default function DocumentsScreen() {
                         <Ionicons name="chevron-forward" size={18} color="rgba(255,255,255,0.7)" />
                     </TouchableOpacity>
 
-                    {/* ── Search + Sort ─────────────────────────────────── */}
-                    {aiMode ? (
-                        <AISearchBar
-                            onClose={() => { setAiMode(false); aiSearch.clear(); }}
-                            query={aiSearch.query}
-                            setQuery={aiSearch.setQuery}
-                            status={aiSearch.status}
-                        />
-                    ) : (
-                        <View style={styles.searchRow}>
-                            <View style={styles.searchBox}>
-                                <Ionicons name="search-outline" size={16} color="#94A3B8" />
-                                <TextInput
-                                    style={styles.searchInput}
-                                    value={search}
-                                    onChangeText={setSearch}
-                                    placeholder="Buscar documento principal o vinculado..."
-                                    placeholderTextColor="#94A3B8"
-                                />
-                                {search.length > 0 && (
-                                    <TouchableOpacity onPress={() => setSearch('')}>
-                                        <Ionicons name="close-circle" size={16} color="#CBD5E1" />
-                                    </TouchableOpacity>
-                                )}
-                            </View>
-                            <TouchableOpacity
-                                style={styles.aiBtn}
-                                onPress={() => setAiMode(true)}
-                            >
-                                <Ionicons name="sparkles-outline" size={15} color="#3B7BFF" />
-                                <Text style={styles.aiBtnText}>IA</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.filterBtn}>
-                                <Ionicons name="options-outline" size={15} color="#3B7BFF" />
-                                <Text style={styles.filterBtnText}>Filtros</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
+                    {/* ── Search ──────────────────────────────────────────── */}
+                    <AISearchBar
+                        query={aiSearch.query}
+                        setQuery={aiSearch.setQuery}
+                        status={aiSearch.status}
+                    />
 
                     {/* ── Category filter chips ─────────────────────────── */}
-                    {!aiMode && (
+                    {!isSearching && (
                     <ScrollView
                         horizontal
                         showsHorizontalScrollIndicator={false}
@@ -196,8 +148,8 @@ export default function DocumentsScreen() {
                     </ScrollView>
                     )}
 
-                    {/* ── Sort row / AI Results ────────────────────────── */}
-                    {aiMode ? (
+                    {/* ── AI Results / Sort + docs ──────────────────────── */}
+                    {isSearching ? (
                         <AISearchResults
                             interpretation={aiSearch.interpretation}
                             results={aiSearch.results}
@@ -314,6 +266,7 @@ export default function DocumentsScreen() {
                     )}
 
                     {/* ── How it works footer ───────────────────────────── */}
+                    {!isSearching && (
                     <View style={styles.footerCards}>
                         <View style={styles.footerCard}>
                             <View style={styles.footerCardIcon}>
@@ -343,7 +296,7 @@ export default function DocumentsScreen() {
                             </TouchableOpacity>
                         </View>
                     </View>
-
+                    )}
                     <View style={{ height: 24 }} />
                 </ScrollView>
             </SafeAreaView>
@@ -413,25 +366,7 @@ const styles = StyleSheet.create({
     ctaSub: { fontSize: 11, color: 'rgba(255,255,255,0.75)', lineHeight: 15 },
 
     // Search
-    searchRow: { flexDirection: 'row', gap: 8 },
-    searchBox: {
-        flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8,
-        backgroundColor: '#FFFFFF', borderWidth: 1.5, borderColor: '#E2E8F0',
-        borderRadius: 12, paddingHorizontal: 12, height: 42, ...CARD_SHADOW,
-    },
-    searchInput: { flex: 1, fontSize: 13, color: '#0F172A' },
-    filterBtn: {
-        flexDirection: 'row', alignItems: 'center', gap: 5,
-        backgroundColor: '#FFFFFF', borderWidth: 1.5, borderColor: '#BFDBFE',
-        borderRadius: 12, paddingHorizontal: 12, height: 42, ...CARD_SHADOW,
-    },
-    filterBtnText: { fontSize: 13, fontWeight: '600', color: '#3B7BFF' },
-    aiBtn: {
-        flexDirection: 'row', alignItems: 'center', gap: 5,
-        backgroundColor: '#EFF6FF', borderWidth: 1.5, borderColor: '#BFDBFE',
-        borderRadius: 12, paddingHorizontal: 12, height: 42, ...CARD_SHADOW,
-    },
-    aiBtnText: { fontSize: 13, fontWeight: '600', color: '#3B7BFF' },
+    aiBar: { marginBottom: 0 },
 
     // Category chips
     catChips: { gap: 7, paddingVertical: 2 },

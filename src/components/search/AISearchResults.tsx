@@ -49,9 +49,9 @@ export function AISearchResults({
   query,
   setQuery,
 }: AISearchResultsProps) {
-  if (status === 'idle' || status === 'loading') return null;
-
   const suggestions = useMemo(() => getRandomItems(ALL_SUGGESTIONS, 4), [query]);
+
+  if (status === 'idle' || status === 'loading') return null;
 
   const errorMessage = (() => {
     if (!error) return null;
