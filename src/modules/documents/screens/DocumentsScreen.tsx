@@ -1,4 +1,7 @@
+import { AISearchBar } from '@/components/search/AISearchBar';
+import { AISearchResults } from '@/components/search/AISearchResults';
 import { DocumentRow } from '@/modules/documents/components/DocumentRow';
+import { useAISearch } from '@/hooks/useAISearch';
 import { useDocuments } from '@/modules/documents/hooks/useDocuments';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
@@ -31,6 +34,8 @@ export default function DocumentsScreen() {
     const [activeCategory, setActiveCategory] = useState<CategoryId>('all');
     const [sortBy, setSortBy] = useState<SortOption>('Más recientes');
     const [showSort, setShowSort] = useState(false);
+    const [aiMode, setAiMode] = useState(false);
+    const aiSearch = useAISearch();
 
     const activeCat = CATEGORIES.find(c => c.id === activeCategory)!;
 
@@ -101,29 +106,46 @@ export default function DocumentsScreen() {
                     </TouchableOpacity>
 
                     {/* ── Search + Sort ─────────────────────────────────── */}
-                    <View style={styles.searchRow}>
-                        <View style={styles.searchBox}>
-                            <Ionicons name="search-outline" size={16} color="#94A3B8" />
-                            <TextInput
-                                style={styles.searchInput}
-                                value={search}
-                                onChangeText={setSearch}
-                                placeholder="Buscar documento principal o vinculado..."
-                                placeholderTextColor="#94A3B8"
-                            />
-                            {search.length > 0 && (
-                                <TouchableOpacity onPress={() => setSearch('')}>
-                                    <Ionicons name="close-circle" size={16} color="#CBD5E1" />
-                                </TouchableOpacity>
-                            )}
+                    {aiMode ? (
+                        <AISearchBar
+                            onClose={() => { setAiMode(false); aiSearch.clear(); }}
+                            query={aiSearch.query}
+                            setQuery={aiSearch.setQuery}
+                            status={aiSearch.status}
+                        />
+                    ) : (
+                        <View style={styles.searchRow}>
+                            <View style={styles.searchBox}>
+                                <Ionicons name="search-outline" size={16} color="#94A3B8" />
+                                <TextInput
+                                    style={styles.searchInput}
+                                    value={search}
+                                    onChangeText={setSearch}
+                                    placeholder="Buscar documento principal o vinculado..."
+                                    placeholderTextColor="#94A3B8"
+                                />
+                                {search.length > 0 && (
+                                    <TouchableOpacity onPress={() => setSearch('')}>
+                                        <Ionicons name="close-circle" size={16} color="#CBD5E1" />
+                                    </TouchableOpacity>
+                                )}
+                            </View>
+                            <TouchableOpacity
+                                style={styles.aiBtn}
+                                onPress={() => setAiMode(true)}
+                            >
+                                <Ionicons name="sparkles-outline" size={15} color="#3B7BFF" />
+                                <Text style={styles.aiBtnText}>IA</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.filterBtn}>
+                                <Ionicons name="options-outline" size={15} color="#3B7BFF" />
+                                <Text style={styles.filterBtnText}>Filtros</Text>
+                            </TouchableOpacity>
                         </View>
-                        <TouchableOpacity style={styles.filterBtn}>
-                            <Ionicons name="options-outline" size={15} color="#3B7BFF" />
-                            <Text style={styles.filterBtnText}>Filtros</Text>
-                        </TouchableOpacity>
-                    </View>
+                    )}
 
                     {/* ── Category filter chips ─────────────────────────── */}
+                    {!aiMode && (
                     <ScrollView
                         horizontal
                         showsHorizontalScrollIndicator={false}
@@ -172,8 +194,20 @@ export default function DocumentsScreen() {
                             );
                         })}
                     </ScrollView>
+                    )}
 
-                    {/* ── Sort row ──────────────────────────────────────── */}
+                    {/* ── Sort row / AI Results ────────────────────────── */}
+                    {aiMode ? (
+                        <AISearchResults
+                            interpretation={aiSearch.interpretation}
+                            results={aiSearch.results}
+                            status={aiSearch.status}
+                            error={aiSearch.error}
+                            query={aiSearch.query}
+                            setQuery={aiSearch.setQuery}
+                        />
+                    ) : (
+                    <>
                     <View style={styles.sortRow}>
                         <Text style={styles.sortCount}>
                             {activeCategory === 'all'
@@ -275,6 +309,8 @@ export default function DocumentsScreen() {
                                 ))
                             )}
                         </View>
+                    )}
+                    </>
                     )}
 
                     {/* ── How it works footer ───────────────────────────── */}
@@ -390,6 +426,12 @@ const styles = StyleSheet.create({
         borderRadius: 12, paddingHorizontal: 12, height: 42, ...CARD_SHADOW,
     },
     filterBtnText: { fontSize: 13, fontWeight: '600', color: '#3B7BFF' },
+    aiBtn: {
+        flexDirection: 'row', alignItems: 'center', gap: 5,
+        backgroundColor: '#EFF6FF', borderWidth: 1.5, borderColor: '#BFDBFE',
+        borderRadius: 12, paddingHorizontal: 12, height: 42, ...CARD_SHADOW,
+    },
+    aiBtnText: { fontSize: 13, fontWeight: '600', color: '#3B7BFF' },
 
     // Category chips
     catChips: { gap: 7, paddingVertical: 2 },
