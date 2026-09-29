@@ -1,0 +1,3264 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Doclyfi organiza tus documentos y gastos, extrae datos con IA y te recuerda pagos y vencimientos. Próximamente para iOS, Android y WhatsApp."
+    />
+    <meta name="theme-color" content="#0b1633" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Doclyfi — Tus documentos y gastos, en orden" />
+    <meta
+      property="og:description"
+      content="Una forma más clara de guardar documentos, entender gastos y llegar a tiempo a tus fechas importantes."
+    />
+    <meta property="og:image" content="./doclyfi-logo.png" />
+    <title>Doclyfi — Tus documentos y gastos, en orden</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="./doclyfi-logo-iso.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f6f9fd;
+        --surface: #eaf2fd;
+        --card: #ffffff;
+        --border: #d6e4f5;
+        --accent: #248cf4;
+        --accent2: #52d8ff;
+        --dim: #8da0bd;
+        --text: #0b1633;
+        --muted: #52627a;
+        --white: #ffffff;
+        --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 6.5rem;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 16px;
+        line-height: 1.7;
+        overflow-x: hidden;
+      }
+
+      main {
+        display: block;
+      }
+
+      .skip-link {
+        position: fixed;
+        top: 0.75rem;
+        left: 1rem;
+        z-index: 200;
+        transform: translateY(-200%);
+        background: var(--card);
+        color: var(--text);
+        border: 2px solid var(--accent);
+        border-radius: 8px;
+        padding: 0.65rem 1rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: transform 0.2s;
+      }
+
+      .skip-link:focus-visible {
+        transform: translateY(0);
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      a,
+      button,
+      input,
+      summary {
+        touch-action: manipulation;
+      }
+
+      a:focus-visible,
+      button:focus-visible,
+      input:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid var(--accent2);
+        outline-offset: 3px;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        font-family: Poppins, sans-serif;
+        line-height: 1.15;
+      }
+
+      /* ── NAV ─────────────────────────────────────────── */
+      .site-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.1rem 4rem;
+        background: rgba(240, 245, 255, 0.92);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .nav-logo {
+        position: relative;
+        display: block;
+        width: 122px;
+        height: 34px;
+        overflow: hidden;
+        flex-shrink: 0;
+        font-family: Poppins, sans-serif;
+        font-size: 1.45rem;
+        font-weight: 800;
+        color: var(--accent);
+        text-decoration: none;
+        letter-spacing: -0.5px;
+        white-space: nowrap;
+        line-height: 0;
+      }
+
+      .nav-logo .logo-full,
+      .nav-logo .logo-iso,
+      .footer-logo .logo-full,
+      .footer-logo .logo-iso {
+        position: absolute;
+        max-width: none;
+        height: auto;
+      }
+
+      .nav-logo .logo-full,
+      .footer-logo .logo-full {
+        display: block;
+        width: 201px;
+        left: -44px;
+        top: -47px;
+      }
+
+      .nav-logo .logo-iso,
+      .footer-logo .logo-iso {
+        display: none;
+      }
+      .nav-logo span {
+        color: var(--accent);
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2.2rem;
+        list-style: none;
+      }
+      .nav-links a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.92rem;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--accent);
+      }
+
+      .nav-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        white-space: nowrap;
+        background: var(--accent);
+        color: #ffffff;
+        font-family: Poppins, sans-serif;
+        font-weight: 700;
+        font-size: 0.88rem;
+        padding: 0.6rem 1.4rem;
+        border-radius: 8px;
+        text-decoration: none;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+      }
+      .nav-cta:hover {
+        background: var(--accent2);
+        transform: translateY(-1px);
+      }
+
+      .mobile-nav {
+        display: none;
+        position: relative;
+        flex-shrink: 0;
+      }
+
+      .mobile-nav summary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        cursor: pointer;
+        font-family: Poppins, sans-serif;
+        font-size: 0.82rem;
+        font-weight: 700;
+        list-style: none;
+        transition: transform 0.15s var(--ease-out);
+      }
+
+      .mobile-nav summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .mobile-nav summary::after {
+        content: "☰";
+        margin-left: 0;
+        font-size: 1rem;
+      }
+
+      .mobile-nav[open] summary::after {
+        content: "×";
+      }
+
+      .mobile-nav-links {
+        position: absolute;
+        top: calc(100% + 0.7rem);
+        right: 0;
+        min-width: 210px;
+        max-width: calc(100vw - 2rem);
+        max-height: min(60vh, 360px);
+        overflow-y: auto;
+        padding: 0.55rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        box-shadow: 0 12px 30px rgba(36, 140, 244, 0.12);
+        list-style: none;
+        transform-origin: top right;
+        animation: menu-enter 0.2s var(--ease-out) both;
+      }
+
+      @keyframes menu-enter {
+        from {
+          opacity: 0;
+          transform: translateY(-6px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .mobile-nav-links a {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 0.6rem 0.75rem;
+        border-radius: 7px;
+        color: var(--muted);
+        font-size: 0.92rem;
+        text-decoration: none;
+      }
+
+      .mobile-nav-links a:hover {
+        background: rgba(36, 140, 244, 0.1);
+        color: var(--accent);
+      }
+
+      /* ── HERO ────────────────────────────────────────── */
+      #inicio {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 9rem 2rem 5rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-glow {
+        position: absolute;
+        width: 700px;
+        height: 700px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(36, 140, 244, 0.15) 0%,
+          rgba(82, 216, 255, 0.06) 50%,
+          transparent 70%
+        );
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+      .hero-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(var(--border) 1px, transparent 1px),
+          linear-gradient(90deg, var(--border) 1px, transparent 1px);
+        background-size: 48px 48px;
+        opacity: 0.35;
+        mask-image: radial-gradient(
+          ellipse 80% 60% at 50% 50%,
+          black 30%,
+          transparent 100%
+        );
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(36, 140, 244, 0.1);
+        border: 1px solid rgba(36, 140, 244, 0.3);
+        color: var(--accent2);
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 0.35rem 1rem;
+        border-radius: 100px;
+        margin-bottom: 1.8rem;
+        position: relative;
+        animation: hero-enter 0.7s var(--ease-out) both;
+        animation-delay: 0.05s;
+      }
+      .hero-badge::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        background: var(--accent2);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.4;
+          transform: scale(0.7);
+        }
+      }
+
+      .hero h1 {
+        font-size: clamp(2.8rem, 7vw, 5.4rem);
+        font-weight: 800;
+        color: var(--text);
+        max-width: 820px;
+        line-height: 1.08;
+        letter-spacing: -2px;
+        margin-bottom: 1.4rem;
+        position: relative;
+        animation: hero-enter 0.7s var(--ease-out) both;
+        animation-delay: 0.16s;
+      }
+      .hero h1 em {
+        font-style: normal;
+        color: var(--accent2);
+      }
+
+      .hero p {
+        font-size: 1.15rem;
+        color: var(--muted);
+        max-width: 560px;
+        margin: 0 auto 2.6rem;
+        position: relative;
+        animation: hero-enter 0.7s var(--ease-out) both;
+        animation-delay: 0.25s;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+        animation: hero-enter 0.7s var(--ease-out) both;
+        animation-delay: 0.34s;
+      }
+
+      @keyframes hero-enter {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        color: #ffffff;
+        font-family: Poppins, sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        padding: 0.85rem 2.2rem;
+        border-radius: 10px;
+        text-decoration: none;
+        transition:
+          opacity 0.2s,
+          transform 0.15s,
+          box-shadow 0.2s;
+        box-shadow: 0 0 30px rgba(36, 140, 244, 0.35);
+      }
+      .btn-primary:hover {
+        opacity: 0.88;
+        transform: translateY(-2px);
+        box-shadow: 0 0 48px rgba(82, 216, 255, 0.45);
+      }
+
+      .btn-primary:active,
+      .btn-ghost:active,
+      .nav-cta:active,
+      .cta-form button:active,
+      .mobile-nav summary:active {
+        transform: scale(0.97);
+      }
+
+      .btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        background: transparent;
+        color: var(--text);
+        font-family: Poppins, sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 0.85rem 2rem;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        text-decoration: none;
+        transition:
+          border-color 0.2s,
+          color 0.2s,
+          transform 0.15s var(--ease-out);
+      }
+      .btn-ghost:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* ── FLOATING CARDS ──────────────────────────────── */
+      .float-cards {
+        position: relative;
+        width: 100%;
+        max-width: 900px;
+        margin: 4rem auto 0;
+        height: 220px;
+        animation: hero-enter 0.8s var(--ease-out) both;
+        animation-delay: 0.46s;
+      }
+      .fcard {
+        position: absolute;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.1rem 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        box-shadow: 0 8px 32px rgba(36, 140, 244, 0.12);
+        min-width: 0;
+      }
+
+      .fcard > div:last-child {
+        min-width: 0;
+      }
+      .fcard-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+      }
+      .fcard-icon.green {
+        background: rgba(36, 140, 244, 0.15);
+      }
+      .fcard-icon.blue {
+        background: rgba(82, 216, 255, 0.12);
+      }
+      .fcard-icon.yellow {
+        background: rgba(255, 200, 80, 0.1);
+      }
+      .fcard-title {
+        font-family: Poppins, sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: var(--text);
+      }
+      .fcard-sub {
+        font-size: 0.78rem;
+        color: var(--muted);
+        overflow-wrap: anywhere;
+      }
+
+      .fcard:nth-child(1) {
+        left: 0;
+        top: 20px;
+        animation: float1 5s ease-in-out infinite;
+      }
+      .fcard:nth-child(2) {
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0;
+        animation: float2 6s ease-in-out infinite;
+      }
+      .fcard:nth-child(3) {
+        right: 0;
+        top: 30px;
+        animation: float3 4.5s ease-in-out infinite;
+      }
+
+      @keyframes float1 {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-12px);
+        }
+      }
+      @keyframes float2 {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        50% {
+          transform: translateX(-50%) translateY(-10px);
+        }
+      }
+      @keyframes float3 {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-14px);
+        }
+      }
+
+      /* ── SECTION BASE ────────────────────────────────── */
+      section {
+        padding: 7rem 2rem;
+      }
+      .container {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .section-label {
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 0.8rem;
+      }
+      .section-title {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -1px;
+        margin-bottom: 1rem;
+      }
+      .section-desc {
+        color: var(--muted);
+        font-size: 1.05rem;
+        max-width: 520px;
+      }
+      .section-head {
+        margin-bottom: 3.5rem;
+      }
+
+      /* ── FEATURES ────────────────────────────────────── */
+      #funciones {
+        background: var(--surface);
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+        gap: 1.5rem;
+      }
+
+      .feat-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 2rem;
+        transition:
+          border-color 0.25s,
+          transform 0.25s;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .feat-card > * {
+        position: relative;
+        z-index: 1;
+      }
+      .feat-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at 50% -10%,
+          rgba(36, 140, 244, 0.08),
+          transparent 70%
+        );
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .feat-card:hover {
+        border-color: rgba(36, 140, 244, 0.5);
+        transform: translateY(-4px);
+      }
+      .feat-card:hover::after {
+        opacity: 1;
+      }
+
+      .feat-emoji {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: rgba(36, 140, 244, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1.3rem;
+      }
+      .feat-card h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+      }
+      .feat-card p {
+        font-size: 0.93rem;
+        color: var(--muted);
+      }
+
+      /* ── HOW IT WORKS ────────────────────────────────── */
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        position: relative;
+        list-style: none;
+      }
+      .steps::before {
+        content: "";
+        position: absolute;
+        left: 27px;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: linear-gradient(to bottom, var(--accent), transparent);
+      }
+
+      .step {
+        display: flex;
+        gap: 1.8rem;
+        align-items: flex-start;
+        padding: 2rem 0;
+      }
+      .step-num {
+        flex-shrink: 0;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--card);
+        border: 2px solid var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Poppins, sans-serif;
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: var(--accent);
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 0 20px rgba(36, 140, 244, 0.3);
+      }
+      .step-content h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 0.4rem;
+      }
+      .step-content p {
+        color: var(--muted);
+        font-size: 0.95rem;
+        max-width: 52ch;
+      }
+
+      .how-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: start;
+      }
+
+      .how-panel {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin-top: 1rem;
+      }
+
+      /* ── MASCOT ─────────────────────────────────────── */
+      .mascot-section {
+        padding-block: 4rem;
+      }
+
+      .mascot-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+        align-items: center;
+        gap: 2rem;
+        overflow: hidden;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+      }
+
+      .mascot-copy {
+        padding: 2.5rem 0 2.5rem 2.75rem;
+      }
+
+      .mascot-copy h2 {
+        max-width: 16ch;
+        margin-bottom: 0.9rem;
+        color: var(--text);
+        font-size: clamp(1.8rem, 3vw, 2.6rem);
+        font-weight: 800;
+        letter-spacing: -1px;
+        line-height: 1.1;
+      }
+
+      .mascot-copy p {
+        max-width: 48ch;
+        color: var(--muted);
+        font-size: 0.98rem;
+        line-height: 1.65;
+      }
+
+      .mascot-figure {
+        position: relative;
+        display: grid;
+        min-height: 300px;
+        margin: 0;
+        place-items: center;
+        isolation: isolate;
+      }
+
+      .mascot-figure::before {
+        content: "";
+        position: absolute;
+        width: 245px;
+        height: 245px;
+        border: 1px solid rgba(36, 140, 244, 0.25);
+        border-radius: 50%;
+        box-shadow:
+          0 0 0 18px rgba(36, 140, 244, 0.05),
+          0 0 0 36px rgba(82, 216, 255, 0.04);
+        z-index: -1;
+      }
+
+      .mascot-figure img {
+        display: block;
+        width: min(100%, 330px);
+        height: auto;
+        aspect-ratio: 1;
+        object-fit: contain;
+        animation: mascot-float 5s ease-in-out infinite;
+      }
+
+      @keyframes mascot-float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .mascot-figure img {
+          animation: none;
+        }
+      }
+
+      .channel-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.1rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+      }
+
+      .channel-item > span:first-child {
+        flex-shrink: 0;
+      }
+
+      .channel-copy {
+        min-width: 0;
+      }
+
+      .channel-status {
+        margin-left: auto;
+        flex-shrink: 0;
+      }
+
+      /* ── NOTIFICATIONS ───────────────────────────────── */
+      #notificaciones {
+        background: var(--surface);
+      }
+      .notif-wrap {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: center;
+      }
+      .notif-demo {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .notif-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.1rem 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        min-width: 0;
+      }
+      .notif-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+      .ni-green {
+        background: rgba(36, 140, 244, 0.15);
+      }
+      .ni-orange {
+        background: rgba(255, 160, 80, 0.12);
+      }
+      .ni-blue {
+        background: rgba(82, 216, 255, 0.12);
+      }
+
+      .notif-body strong {
+        font-size: 0.9rem;
+        color: var(--text);
+        font-weight: 600;
+        display: block;
+      }
+      .notif-body span {
+        font-size: 0.78rem;
+        color: var(--muted);
+        overflow-wrap: anywhere;
+      }
+
+      /* ── CTA ─────────────────────────────────────────── */
+      #lista {
+        text-align: center;
+        background: linear-gradient(135deg, #deeaf8 0%, #e8f3fb 100%);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .cta-box {
+        max-width: 680px;
+        margin: 0 auto;
+      }
+      .cta-box h2 {
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -1.5px;
+        margin-bottom: 1rem;
+      }
+      .cta-box h2 span {
+        color: var(--accent2);
+      }
+      .cta-box p {
+        color: var(--muted);
+        margin-bottom: 2rem;
+        font-size: 1.05rem;
+      }
+
+      .cta-form {
+        display: flex;
+        gap: 0.7rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .cta-form input {
+        background: var(--card);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.95rem;
+        padding: 0.82rem 1.3rem;
+        border-radius: 10px;
+        outline: none;
+        width: 280px;
+        min-height: 48px;
+        transition: border-color 0.2s;
+      }
+      .cta-form input:focus {
+        border-color: var(--accent);
+      }
+      .cta-form input::placeholder {
+        color: var(--dim);
+      }
+      .cta-form button {
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        color: #ffffff;
+        font-family: Poppins, sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        padding: 0.82rem 1.8rem;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        min-height: 48px;
+        transition:
+          opacity 0.2s,
+          transform 0.15s var(--ease-out);
+      }
+      .cta-form button:hover {
+        opacity: 0.85;
+      }
+
+      /* ── PRIVACY POLICY ──────────────────────────────── */
+      #privacidad {
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+      }
+
+      .privacy-header {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+      .privacy-header .section-desc {
+        margin: 0 auto;
+      }
+
+      .privacy-grid {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        gap: 3rem;
+        align-items: start;
+      }
+
+      .privacy-nav {
+        position: sticky;
+        top: 90px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.4rem;
+      }
+      .privacy-nav p {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--dim);
+        margin-bottom: 0.9rem;
+      }
+      .privacy-nav ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+      .privacy-nav a {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--muted);
+        text-decoration: none;
+        padding: 0.4rem 0.6rem;
+        min-height: 36px;
+        display: flex;
+        align-items: center;
+        border-radius: 7px;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .privacy-nav a:hover {
+        background: rgba(36, 140, 244, 0.1);
+        color: var(--accent);
+      }
+
+      .privacy-content {
+        display: flex;
+        flex-direction: column;
+        gap: 2.8rem;
+      }
+
+      .priv-section {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 2.2rem;
+        scroll-margin-top: 90px;
+      }
+      .priv-section h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 1rem;
+        padding-bottom: 0.7rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        overflow-wrap: anywhere;
+      }
+      .priv-section h3 .priv-num {
+        background: rgba(36, 140, 244, 0.14);
+        color: var(--accent2);
+        font-size: 0.72rem;
+        font-weight: 800;
+        padding: 0.2rem 0.55rem;
+        border-radius: 6px;
+        letter-spacing: 0.04em;
+      }
+
+      .priv-section p,
+      .priv-section li {
+        font-size: 0.93rem;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+      .priv-section ul {
+        padding-left: 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .priv-section .sub-group {
+        margin-top: 0.8rem;
+      }
+      .priv-section .sub-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--accent);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 0.4rem;
+      }
+
+      .priv-contact {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(36, 140, 244, 0.08);
+        border: 1px solid rgba(36, 140, 244, 0.25);
+        color: var(--accent);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        text-decoration: none;
+        margin-top: 0.6rem;
+        transition: background 0.2s;
+      }
+      .priv-contact:hover {
+        background: rgba(36, 140, 244, 0.16);
+      }
+
+      .priv-address {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1rem 1.2rem;
+        font-size: 0.88rem;
+        color: var(--muted);
+        margin-top: 0.8rem;
+        line-height: 1.9;
+      }
+
+      .priv-highlight {
+        background: rgba(82, 216, 255, 0.06);
+        border-left: 3px solid var(--accent2);
+        padding: 0.9rem 1.1rem;
+        border-radius: 0 8px 8px 0;
+        margin-top: 0.8rem;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      /* ── FOOTER ──────────────────────────────────────── */
+      footer {
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        padding: 3rem 2rem;
+      }
+      .footer-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+      }
+      .footer-logo {
+        position: relative;
+        display: block;
+        width: 122px;
+        height: 34px;
+        overflow: hidden;
+        flex-shrink: 0;
+        font-family: Poppins, sans-serif;
+        font-weight: 800;
+        font-size: 1.3rem;
+        color: var(--text);
+        text-decoration: none;
+        line-height: 0;
+      }
+      .footer-logo span {
+        color: var(--accent2);
+      }
+      .footer-links {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+      .footer-links a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+        font-size: 0.85rem;
+        color: var(--muted);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .footer-links a:hover {
+        color: var(--accent);
+      }
+      .footer-copy {
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      .scroll-reveal {
+        opacity: 0;
+        transform: translateY(14px);
+        transition:
+          opacity 0.45s var(--ease-out),
+          transform 0.45s var(--ease-out);
+        transition-delay: var(--reveal-delay, 0ms);
+      }
+
+      .scroll-reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      /* ── RESPONSIVE ──────────────────────────────────── */
+      @media (max-width: 900px) {
+        .site-nav {
+          padding: 1rem 1.5rem;
+          gap: 0.75rem;
+        }
+        .nav-links {
+          display: none;
+        }
+        .mobile-nav {
+          display: block;
+          order: 3;
+          margin-left: 0;
+          margin-right: 0;
+        }
+        .nav-cta {
+          order: 2;
+          margin-left: auto;
+        }
+        .nav-logo {
+          width: 42px;
+          height: 42px;
+        }
+        .nav-logo .logo-full {
+          display: none;
+        }
+        .nav-logo .logo-iso {
+          display: block;
+          width: 79px;
+          left: -23px;
+          top: -11px;
+        }
+        .how-grid {
+          grid-template-columns: 1fr;
+          gap: 3rem;
+        }
+        .how-panel {
+          margin-top: 0;
+        }
+        .mascot-card {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+        .mascot-copy {
+          padding: 2rem 1.5rem 0.5rem;
+        }
+        .mascot-figure {
+          min-height: 250px;
+        }
+        .mascot-figure img {
+          width: min(100%, 270px);
+        }
+        .notif-wrap {
+          grid-template-columns: 1fr;
+        }
+        .privacy-grid {
+          grid-template-columns: 1fr;
+        }
+        .privacy-nav {
+          position: static;
+        }
+        .float-cards {
+          height: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          position: static;
+        }
+        .fcard {
+          position: static;
+          transform: none !important;
+          animation: none !important;
+        }
+      }
+      @media (max-width: 600px) {
+        section {
+          padding: 5rem 1.2rem;
+        }
+        .site-nav {
+          padding: 0.75rem 1rem;
+        }
+        .nav-logo {
+          width: 42px;
+          height: 42px;
+        }
+        .nav-cta {
+          min-height: 44px;
+          padding: 0.55rem 0.8rem;
+          font-size: 0.78rem;
+        }
+        #inicio {
+          min-height: 100svh;
+          min-height: 100dvh;
+          padding-top: 7.5rem;
+          padding-bottom: 3rem;
+        }
+        .hero-badge {
+          max-width: 100%;
+          padding-inline: 0.75rem;
+          font-size: 0.72rem;
+          text-align: center;
+        }
+        .hero h1 {
+          font-size: clamp(2.45rem, 12vw, 4rem);
+          letter-spacing: -1.5px;
+        }
+        .hero p {
+          font-size: 1rem;
+        }
+        .hero-actions > a {
+          width: 100%;
+        }
+        .float-cards {
+          margin-top: 3rem;
+        }
+        .fcard {
+          width: 100%;
+          max-width: 23rem;
+          margin-inline: auto;
+          padding: 0.9rem 1rem;
+        }
+        .section-head {
+          margin-bottom: 2.5rem;
+        }
+        .feat-card {
+          padding: 1.4rem;
+        }
+        .step {
+          gap: 1.25rem;
+          padding: 1.4rem 0;
+        }
+        .steps::before {
+          left: 27px;
+        }
+        .how-panel {
+          padding: 1.4rem;
+        }
+        .channel-item {
+          align-items: flex-start;
+          flex-wrap: wrap;
+          row-gap: 0.6rem;
+        }
+        .channel-status {
+          margin-left: calc(1.8rem + 1rem) !important;
+        }
+        .cta-form {
+          flex-direction: column;
+          align-items: stretch;
+          max-width: 360px;
+          margin: 0 auto;
+        }
+        .cta-form input,
+        .cta-form button {
+          width: 100%;
+        }
+        .notif-wrap {
+          gap: 2rem;
+        }
+        .notif-demo {
+          gap: 0.75rem;
+        }
+        .notif-card {
+          padding: 0.9rem 1rem;
+          gap: 0.8rem;
+        }
+        .privacy-nav ul {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.25rem 0.5rem;
+        }
+        .priv-section {
+          padding: 1.4rem;
+        }
+        .footer-links {
+          gap: 0.5rem 1rem;
+        }
+        .footer-logo {
+          width: 42px;
+          height: 42px;
+        }
+        .footer-logo .logo-full {
+          display: none;
+        }
+        .footer-logo .logo-iso {
+          display: block;
+          width: 79px;
+          left: -23px;
+          top: -11px;
+        }
+      }
+
+      @media (max-width: 380px) {
+        .site-nav {
+          gap: 0.5rem;
+        }
+        .mobile-nav {
+          margin-right: 0;
+        }
+        .mobile-nav summary {
+          width: 42px;
+          height: 42px;
+        }
+        .nav-cta {
+          padding-inline: 0.65rem;
+          font-size: 0.72rem;
+        }
+      }
+
+      /* ── DOClyfi DESIGN SYSTEM ──────────────────────── */
+      :root {
+        --bg: #f6f9fd;
+        --surface: #ffffff;
+        --surface-soft: #eaf2fd;
+        --surface-deep: #dceafb;
+        --brand: #248cf4;
+        --brand-strong: #006bff;
+        --brand-deep: #0b1633;
+        --cyan: #52d8ff;
+        --text: #0b1633;
+        --muted: #52627a;
+        --dim: #8da0bd;
+        --border: #d6e4f5;
+        --success: #247b5a;
+        --warning: #a65f1c;
+        --accent: var(--brand);
+        --accent2: var(--cyan);
+        --card: var(--surface);
+        --white: #ffffff;
+        --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+        --shadow-sm: 0 8px 24px rgba(11, 22, 51, 0.06);
+        --shadow-md: 0 20px 60px rgba(11, 22, 51, 0.1);
+      }
+
+      html {
+        scroll-padding-top: 5.5rem;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Work Sans", sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      .site-nav,
+      .btn-primary,
+      .btn-ghost,
+      .nav-cta,
+      button,
+      .section-label {
+        font-family: "Outfit", sans-serif;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .site-nav {
+        height: 76px;
+        padding: 0 5vw;
+        background: rgba(246, 249, 253, 0.9);
+        border-bottom: 1px solid rgba(214, 228, 245, 0.86);
+        box-shadow: 0 4px 18px rgba(11, 22, 51, 0.04);
+        backdrop-filter: blur(18px);
+      }
+
+      .nav-logo {
+        width: 144px;
+        height: 42px;
+        overflow: hidden;
+        border-radius: 8px;
+      }
+
+      .nav-logo .logo-full,
+      .footer-logo .logo-full {
+        inset: auto;
+        width: auto;
+        height: auto;
+        object-fit: initial;
+        object-position: initial;
+      }
+
+      .nav-logo .logo-full {
+        top: -50px;
+        left: -46px;
+        width: 214px;
+      }
+
+      .footer-logo .logo-full {
+        top: -47px;
+        left: -44px;
+        width: 201px;
+      }
+
+      .nav-logo .logo-iso,
+      .footer-logo .logo-iso {
+        display: none;
+      }
+
+      .nav-links {
+        gap: clamp(1rem, 2.4vw, 2rem);
+      }
+
+      .nav-links a,
+      .footer-links a {
+        color: var(--muted);
+        font-size: 0.88rem;
+        font-weight: 500;
+        transition: color 180ms ease;
+      }
+
+      .nav-links a:hover,
+      .footer-links a:hover {
+        color: var(--brand-strong);
+      }
+
+      .nav-cta {
+        min-height: 44px;
+        padding: 0.6rem 1.1rem;
+        background: var(--brand-deep);
+        border: 1px solid var(--brand-deep);
+        border-radius: 999px;
+        color: var(--white);
+        font-size: 0.84rem;
+        font-weight: 700;
+        transition: transform 180ms ease, background 180ms ease;
+      }
+
+      .nav-cta:hover {
+        background: var(--brand-strong);
+        transform: translateY(-1px);
+      }
+
+      .mobile-nav summary {
+        width: 44px;
+        height: 44px;
+        border-color: var(--border);
+        color: var(--brand-deep);
+      }
+
+      .mobile-nav-links {
+        background: var(--surface);
+        border-color: var(--border);
+        box-shadow: var(--shadow-md);
+      }
+
+      .mobile-nav-links a:hover {
+        background: var(--surface-soft);
+        color: var(--brand-strong);
+      }
+
+      .hero {
+        min-height: 720px;
+        align-items: stretch;
+        padding: 9.25rem 5vw 6rem;
+        background:
+          radial-gradient(circle at 84% 14%, rgba(82, 216, 255, 0.14), transparent 25rem),
+          var(--bg);
+        text-align: left;
+      }
+
+      .hero-grid {
+        opacity: 0.22;
+        background-size: 56px 56px;
+        mask-image: linear-gradient(to bottom, black, transparent 80%);
+      }
+
+      .hero-glow {
+        width: 620px;
+        height: 620px;
+        top: 34%;
+        left: 84%;
+        background: radial-gradient(circle, rgba(36, 140, 244, 0.13), transparent 68%);
+      }
+
+      .hero-layout {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(420px, 1.05fr);
+        align-items: center;
+        gap: clamp(3rem, 7vw, 7rem);
+        width: min(1180px, 100%);
+        margin: 0 auto;
+      }
+
+      .hero-copy {
+        max-width: 680px;
+      }
+
+      .eyebrow,
+      .section-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        color: var(--brand-strong);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--cyan);
+        box-shadow: 0 0 0 5px rgba(82, 216, 255, 0.16);
+        content: "";
+      }
+
+      .hero h1 {
+        max-width: 760px;
+        margin: 1.35rem 0 1.5rem;
+        color: var(--brand-deep);
+        font-size: clamp(3rem, 6vw, 5.75rem);
+        font-weight: 800;
+        letter-spacing: -0.065em;
+        line-height: 0.99;
+      }
+
+      .hero h1 em {
+        color: var(--brand-strong);
+      }
+
+      .hero-lede {
+        max-width: 580px;
+        margin-bottom: 2rem;
+        color: var(--muted);
+        font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+      }
+
+      .hero-actions {
+        justify-content: flex-start;
+        gap: 0.75rem;
+      }
+
+      .btn-primary,
+      .btn-ghost {
+        min-height: 50px;
+        padding: 0.78rem 1.25rem;
+        border-radius: 999px;
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .btn-primary {
+        background: var(--brand-deep);
+        box-shadow: 0 12px 28px rgba(11, 22, 51, 0.16);
+      }
+
+      .btn-primary:hover {
+        background: var(--brand-strong);
+        box-shadow: 0 16px 34px rgba(0, 107, 255, 0.2);
+      }
+
+      .btn-ghost {
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.56);
+        color: var(--brand-deep);
+      }
+
+      .btn-ghost:hover {
+        border-color: var(--brand);
+        background: var(--surface);
+      }
+
+      .hero-note {
+        margin-top: 1.15rem;
+        color: var(--dim);
+        font-size: 0.8rem;
+      }
+
+      .hero-visual {
+        position: relative;
+        min-height: 550px;
+      }
+
+      .hero-visual::before {
+        position: absolute;
+        top: 10%;
+        right: 8%;
+        width: 78%;
+        height: 78%;
+        border: 1px solid rgba(36, 140, 244, 0.18);
+        border-radius: 50%;
+        box-shadow:
+          0 0 0 26px rgba(36, 140, 244, 0.04),
+          0 0 0 54px rgba(82, 216, 255, 0.04);
+        content: "";
+      }
+
+      .mascot-hero {
+        position: absolute;
+        right: 0;
+        bottom: 2%;
+        z-index: 2;
+        width: min(52vw, 400px);
+        animation: mascot-float 5s ease-in-out infinite;
+      }
+
+      .mascot-hero img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .demo-card {
+        position: absolute;
+        top: 5%;
+        left: 0;
+        z-index: 3;
+        width: min(330px, 68%);
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.91);
+        border: 1px solid rgba(214, 228, 245, 0.96);
+        border-radius: 18px;
+        box-shadow: var(--shadow-md);
+        backdrop-filter: blur(12px);
+      }
+
+      .demo-kicker,
+      .demo-caption,
+      .demo-meta {
+        color: var(--dim);
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .demo-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .demo-heading strong {
+        color: var(--brand-deep);
+        font-family: "Outfit", sans-serif;
+        font-size: 0.95rem;
+      }
+
+      .demo-status {
+        color: var(--success);
+        font-size: 0.68rem;
+        font-weight: 700;
+      }
+
+      .demo-document {
+        display: grid;
+        grid-template-columns: 38px 1fr;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.75rem;
+        background: var(--surface-soft);
+        border-radius: 12px;
+      }
+
+      .demo-icon,
+      .feature-icon,
+      .workflow-icon {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+        background: rgba(36, 140, 244, 0.12);
+        color: var(--brand-strong);
+      }
+
+      .demo-document strong {
+        display: block;
+        color: var(--brand-deep);
+        font-size: 0.85rem;
+      }
+
+      .demo-document span {
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+
+      .demo-extraction {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.55rem;
+        margin-top: 0.65rem;
+      }
+
+      .demo-field {
+        padding: 0.55rem 0.65rem;
+        border: 1px solid var(--border);
+        border-radius: 9px;
+      }
+
+      .demo-field span,
+      .demo-field strong {
+        display: block;
+      }
+
+      .demo-field span {
+        color: var(--dim);
+        font-size: 0.62rem;
+      }
+
+      .demo-field strong {
+        color: var(--brand-deep);
+        font-size: 0.75rem;
+      }
+
+      .visual-chip {
+        position: absolute;
+        z-index: 4;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.55rem 0.75rem;
+        background: var(--brand-deep);
+        border-radius: 999px;
+        box-shadow: var(--shadow-sm);
+        color: var(--white);
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
+
+      .visual-chip::before {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--cyan);
+        content: "";
+      }
+
+      .chip-alert {
+        right: 2%;
+        bottom: 15%;
+      }
+
+      .chip-channel {
+        top: 15%;
+        right: 0;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--brand-deep);
+      }
+
+      .chip-channel::before {
+        background: var(--brand);
+      }
+
+      section {
+        padding: 7.5rem 5vw;
+      }
+
+      .container {
+        width: min(1180px, 100%);
+      }
+
+      .section-head {
+        max-width: 680px;
+        margin-bottom: 3.25rem;
+      }
+
+      .section-title {
+        margin: 0.85rem 0 1rem;
+        color: var(--brand-deep);
+        font-size: clamp(2.2rem, 4vw, 3.8rem);
+        font-weight: 800;
+        letter-spacing: -0.06em;
+        line-height: 1;
+      }
+
+      .section-desc {
+        max-width: 60ch;
+        color: var(--muted);
+        font-size: 1.03rem;
+      }
+
+      #funciones {
+        background: var(--surface);
+      }
+
+      .feature-layout {
+        display: grid;
+        grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
+        gap: 1.2rem;
+        align-items: stretch;
+      }
+
+      .feature-panel,
+      .feature-card,
+      .workflow-demo,
+      .assist-card,
+      .vision-card,
+      .trust-panel {
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: var(--surface);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .feature-panel {
+        display: flex;
+        min-height: 355px;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 2rem;
+        background: var(--brand-deep);
+        color: var(--white);
+        overflow: hidden;
+      }
+
+      .feature-panel h3 {
+        max-width: 11ch;
+        margin: 1.1rem 0 0.75rem;
+        font-size: clamp(1.8rem, 3vw, 2.65rem);
+        letter-spacing: -0.05em;
+        line-height: 1;
+      }
+
+      .feature-panel p {
+        max-width: 32ch;
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 0.94rem;
+      }
+
+      .document-pile {
+        display: flex;
+        align-items: end;
+        height: 92px;
+        padding-left: 1rem;
+      }
+
+      .document-pile span {
+        display: block;
+        width: 72px;
+        height: 88px;
+        margin-left: -1rem;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 9px;
+        background: var(--surface);
+        transform: rotate(-12deg);
+      }
+
+      .document-pile span:nth-child(2) {
+        height: 76px;
+        background: var(--surface-soft);
+        transform: rotate(5deg) translateY(-7px);
+      }
+
+      .document-pile span:nth-child(3) {
+        height: 64px;
+        background: var(--cyan);
+        transform: rotate(14deg) translateY(-14px);
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.2rem;
+      }
+
+      .feature-card {
+        min-height: 170px;
+        padding: 1.5rem;
+        transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+      }
+
+      .feature-card:hover {
+        border-color: rgba(36, 140, 244, 0.5);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-3px);
+      }
+
+      .feature-card h3 {
+        margin: 1rem 0 0.45rem;
+        color: var(--brand-deep);
+        font-size: 1.15rem;
+      }
+
+      .feature-card p {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .feature-card-wide {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 1rem;
+        min-height: 0;
+      }
+
+      .channel-pills {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: end;
+        gap: 0.45rem;
+      }
+
+      .channel-pills span,
+      .status-pill,
+      .document-tags span {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        padding: 0.3rem 0.65rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        color: var(--brand-strong);
+        font-size: 0.72rem;
+        font-weight: 600;
+      }
+
+      #como-funciona {
+        background: var(--surface-soft);
+      }
+
+      .workflow-layout {
+        display: grid;
+        grid-template-columns: minmax(240px, 0.78fr) minmax(0, 1.22fr);
+        gap: 4rem;
+        align-items: center;
+      }
+
+      .workflow-steps {
+        display: grid;
+        gap: 1.1rem;
+        list-style: none;
+      }
+
+      .workflow-step {
+        display: grid;
+        grid-template-columns: 36px 1fr;
+        gap: 0.9rem;
+        align-items: start;
+      }
+
+      .workflow-number {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        border: 1px solid rgba(36, 140, 244, 0.34);
+        border-radius: 50%;
+        background: var(--surface);
+        color: var(--brand-strong);
+        font-family: "Outfit", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      .workflow-step h3 {
+        margin-bottom: 0.25rem;
+        color: var(--brand-deep);
+        font-size: 1.05rem;
+      }
+
+      .workflow-step p {
+        color: var(--muted);
+        font-size: 0.87rem;
+      }
+
+      .workflow-demo {
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.72);
+      }
+
+      .demo-window-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.35rem 0.35rem 0.9rem;
+      }
+
+      .window-dots {
+        display: flex;
+        gap: 0.3rem;
+      }
+
+      .window-dots span {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--border);
+      }
+
+      .demo-caption {
+        color: var(--brand-strong);
+      }
+
+      .workflow-screen {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 0.85rem;
+        padding: 1rem;
+        border: 1px solid var(--border);
+        border-radius: 17px;
+        background: var(--surface);
+      }
+
+      .receipt-preview {
+        min-height: 210px;
+        padding: 1rem;
+        border: 1px dashed rgba(36, 140, 244, 0.35);
+        border-radius: 13px;
+        background: linear-gradient(145deg, var(--surface-soft), var(--surface));
+      }
+
+      .receipt-preview h4 {
+        margin: 0.9rem 0 0.6rem;
+        color: var(--brand-deep);
+        font-size: 1.05rem;
+      }
+
+      .receipt-line {
+        width: 72%;
+        height: 7px;
+        margin-bottom: 0.5rem;
+        border-radius: 99px;
+        background: var(--border);
+      }
+
+      .receipt-line.short {
+        width: 45%;
+      }
+
+      .extraction-panel {
+        padding: 0.15rem;
+      }
+
+      .extraction-panel h4 {
+        margin: 0 0 0.7rem;
+        color: var(--brand-deep);
+        font-size: 0.88rem;
+      }
+
+      .extraction-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.65rem 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.75rem;
+      }
+
+      .extraction-row span {
+        color: var(--dim);
+      }
+
+      .extraction-row strong {
+        color: var(--brand-deep);
+        font-weight: 600;
+        text-align: right;
+      }
+
+      .demo-disclaimer {
+        margin: 0.75rem 0.25rem 0;
+        color: var(--dim);
+        font-size: 0.68rem;
+      }
+
+      .docly-spotlight {
+        padding-block: 4.5rem;
+        background: var(--surface);
+      }
+
+      .mascot-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(260px, 350px);
+        align-items: center;
+        gap: 2rem;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 26px;
+        background: var(--brand-deep);
+        box-shadow: var(--shadow-md);
+      }
+
+      .mascot-copy {
+        padding: 2.6rem 0 2.6rem 3rem;
+      }
+
+      .mascot-copy .section-label {
+        color: var(--cyan);
+      }
+
+      .mascot-copy h2 {
+        max-width: 15ch;
+        margin: 0.8rem 0 1rem;
+        color: var(--white);
+        font-size: clamp(2rem, 4vw, 3.1rem);
+        letter-spacing: -0.06em;
+        line-height: 0.98;
+      }
+
+      .mascot-copy p {
+        max-width: 54ch;
+        color: rgba(255, 255, 255, 0.73);
+        font-size: 0.98rem;
+      }
+
+      .mascot-figure {
+        position: relative;
+        display: grid;
+        min-height: 320px;
+        margin: 0;
+        place-items: center;
+        isolation: isolate;
+      }
+
+      .mascot-figure::before {
+        width: 235px;
+        height: 235px;
+        border-color: rgba(82, 216, 255, 0.3);
+        box-shadow:
+          0 0 0 18px rgba(82, 216, 255, 0.07),
+          0 0 0 38px rgba(36, 140, 244, 0.08);
+      }
+
+      .mascot-figure img {
+        width: min(100%, 300px);
+      }
+
+      #notificaciones {
+        background: var(--surface-soft);
+      }
+
+      .alert-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 0.85fr) minmax(320px, 1.15fr);
+        gap: 4rem;
+        align-items: center;
+      }
+
+      .alert-list {
+        display: grid;
+        gap: 0.7rem;
+        margin-top: 1.5rem;
+        list-style: none;
+      }
+
+      .alert-list li {
+        display: flex;
+        gap: 0.7rem;
+        align-items: center;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .check {
+        display: grid;
+        flex: 0 0 22px;
+        place-items: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: rgba(36, 140, 244, 0.14);
+        color: var(--brand-strong);
+        font-size: 0.74rem;
+        font-weight: 800;
+      }
+
+      .alert-demo {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .alert-card {
+        display: grid;
+        grid-template-columns: 42px 1fr auto;
+        gap: 0.9rem;
+        align-items: center;
+        padding: 1rem 1.1rem;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: var(--surface);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .alert-icon {
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+        background: rgba(82, 216, 255, 0.18);
+        color: var(--brand-strong);
+      }
+
+      .alert-card strong,
+      .alert-card span {
+        display: block;
+      }
+
+      .alert-card strong {
+        color: var(--brand-deep);
+        font-size: 0.87rem;
+      }
+
+      .alert-card span {
+        color: var(--muted);
+        font-size: 0.76rem;
+      }
+
+      .alert-time {
+        color: var(--warning);
+        font-size: 0.72rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .assist-section {
+        background: var(--surface);
+      }
+
+      .assist-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 2rem;
+        align-items: center;
+        padding: 2.4rem;
+        background: var(--surface-soft);
+      }
+
+      .assist-card h2 {
+        max-width: 18ch;
+        margin: 0.8rem 0;
+        color: var(--brand-deep);
+        font-size: clamp(1.8rem, 3vw, 2.7rem);
+        letter-spacing: -0.055em;
+        line-height: 1;
+      }
+
+      .assist-card p {
+        max-width: 66ch;
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .assist-badges {
+        display: grid;
+        gap: 0.65rem;
+        min-width: 170px;
+      }
+
+      .status-pill {
+        justify-content: center;
+        min-height: 38px;
+        color: var(--brand-deep);
+        background: var(--surface);
+      }
+
+      .status-pill.future {
+        color: var(--muted);
+        border-style: dashed;
+      }
+
+      .trust-section {
+        padding-top: 0;
+        background: var(--surface);
+      }
+
+      .trust-panel {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 1rem;
+        align-items: start;
+        padding: 1.3rem 1.5rem;
+        background: var(--bg);
+      }
+
+      .trust-panel strong {
+        display: block;
+        margin-bottom: 0.2rem;
+        color: var(--brand-deep);
+        font-size: 0.9rem;
+      }
+
+      .trust-panel p {
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      .vision-section {
+        background: var(--brand-deep);
+      }
+
+      .vision-card {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 2rem;
+        align-items: end;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .vision-card .section-label {
+        color: var(--cyan);
+      }
+
+      .vision-card h2 {
+        max-width: 16ch;
+        margin: 0.85rem 0;
+        color: var(--white);
+        font-size: clamp(2.1rem, 4vw, 4rem);
+        letter-spacing: -0.06em;
+        line-height: 0.98;
+      }
+
+      .vision-card p {
+        max-width: 58ch;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .vision-link {
+        display: inline-flex;
+        align-items: center;
+        min-height: 48px;
+        padding: 0.75rem 1rem;
+        border: 1px solid rgba(82, 216, 255, 0.38);
+        border-radius: 999px;
+        color: var(--cyan);
+        font-family: "Outfit", sans-serif;
+        font-size: 0.88rem;
+        font-weight: 700;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: background 180ms ease, color 180ms ease;
+      }
+
+      .vision-link:hover {
+        background: var(--cyan);
+        color: var(--brand-deep);
+      }
+
+      #lista {
+        background: var(--surface-soft);
+      }
+
+      .waitlist-box {
+        max-width: 920px;
+        margin: 0 auto;
+        padding: clamp(2rem, 5vw, 4.2rem);
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        background: var(--surface);
+        box-shadow: var(--shadow-md);
+        text-align: center;
+      }
+
+      .waitlist-box h2 {
+        margin: 0.8rem auto 0.8rem;
+        color: var(--brand-deep);
+        font-size: clamp(2.4rem, 5vw, 4.5rem);
+        letter-spacing: -0.07em;
+        line-height: 0.98;
+      }
+
+      .waitlist-box h2 span {
+        color: var(--brand-strong);
+      }
+
+      .waitlist-box > p {
+        max-width: 50ch;
+        margin: 0 auto 1.6rem;
+        color: var(--muted);
+      }
+
+      .waitlist-form {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 0.6rem;
+        max-width: 620px;
+        margin: 0 auto;
+      }
+
+      .waitlist-form input,
+      .waitlist-form button {
+        min-height: 52px;
+        border-radius: 12px;
+        font: inherit;
+      }
+
+      .waitlist-form input {
+        min-width: 0;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        color: var(--brand-deep);
+      }
+
+      .waitlist-form input::placeholder {
+        color: var(--dim);
+      }
+
+      .waitlist-form button {
+        padding: 0.75rem 1.1rem;
+        border: 1px solid var(--brand-deep);
+        background: var(--brand-deep);
+        color: var(--white);
+        cursor: pointer;
+        font-family: "Outfit", sans-serif;
+        font-size: 0.86rem;
+        font-weight: 700;
+        transition: background 180ms ease, transform 180ms ease;
+      }
+
+      .waitlist-form button:hover {
+        background: var(--brand-strong);
+        transform: translateY(-1px);
+      }
+
+      .waitlist-form button[aria-busy="true"] {
+        cursor: wait;
+        opacity: 0.72;
+      }
+
+      .form-note,
+      .form-status {
+        max-width: 620px;
+        margin: 0.8rem auto 0;
+        color: var(--dim);
+        font-size: 0.75rem;
+      }
+
+      .form-status[data-state="error"] {
+        color: var(--warning);
+      }
+
+      .form-status[data-state="info"] {
+        color: var(--brand-strong);
+      }
+
+      footer {
+        padding: 2.2rem 5vw;
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+      }
+
+      .footer-inner {
+        width: min(1180px, 100%);
+      }
+
+      .footer-logo {
+        width: 132px;
+        height: 38px;
+        overflow: hidden;
+      }
+
+      .footer-links {
+        gap: 1.25rem;
+      }
+
+      .footer-copy {
+        color: var(--dim);
+        font-size: 0.75rem;
+      }
+
+      .scroll-reveal {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: opacity 360ms var(--ease-out), transform 360ms var(--ease-out);
+        transition-delay: var(--reveal-delay, 0ms);
+      }
+
+      .scroll-reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (max-width: 980px) {
+        .hero-layout,
+        .workflow-layout,
+        .alert-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          min-height: auto;
+        }
+
+        .hero-copy {
+          max-width: 720px;
+        }
+
+        .hero-visual {
+          min-height: 510px;
+          width: min(640px, 100%);
+          margin: 0 auto;
+        }
+
+        .workflow-layout,
+        .alert-layout {
+          gap: 2.5rem;
+        }
+
+        .feature-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .feature-panel {
+          min-height: 300px;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .site-nav {
+          height: 68px;
+          padding: 0 1rem;
+        }
+
+        .nav-logo {
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+        }
+
+        .nav-logo .logo-full,
+        .footer-logo .logo-full {
+          display: none;
+        }
+
+        .nav-logo .logo-iso,
+        .footer-logo .logo-iso {
+          display: block;
+          inset: auto;
+          top: -11px;
+          left: -23px;
+          width: 79px;
+          height: auto;
+          object-fit: initial;
+        }
+
+        .nav-cta {
+          padding-inline: 0.8rem;
+          font-size: 0.76rem;
+        }
+
+        .hero {
+          padding: 7.5rem 1.2rem 4.5rem;
+        }
+
+        .hero-layout {
+          gap: 2rem;
+        }
+
+        .hero h1 {
+          font-size: clamp(2.75rem, 13vw, 4.3rem);
+        }
+
+        .hero-actions {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .hero-actions > a {
+          width: 100%;
+          text-align: center;
+        }
+
+        .hero-visual {
+          min-height: 420px;
+        }
+
+        .mascot-hero {
+          right: 0;
+          width: min(75vw, 330px);
+        }
+
+        .demo-card {
+          top: 0;
+          width: min(300px, 82%);
+        }
+
+        .chip-channel {
+          top: auto;
+          right: 0;
+          bottom: 16%;
+        }
+
+        .chip-alert {
+          right: 2%;
+          bottom: 3%;
+        }
+
+        section {
+          padding: 5.2rem 1.2rem;
+        }
+
+        .section-title {
+          font-size: clamp(2.2rem, 11vw, 3.2rem);
+        }
+
+        .feature-grid,
+        .workflow-screen,
+        .assist-card,
+        .vision-card,
+        .waitlist-form {
+          grid-template-columns: 1fr;
+        }
+
+        .feature-card-wide {
+          align-items: start;
+        }
+
+        .channel-pills {
+          justify-content: start;
+        }
+
+        .workflow-screen {
+          gap: 1rem;
+        }
+
+        .docly-spotlight {
+          padding-block: 3.5rem;
+        }
+
+        .mascot-card {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+
+        .mascot-copy {
+          padding: 2rem 1.5rem 0.5rem;
+        }
+
+        .mascot-figure {
+          min-height: 260px;
+        }
+
+        .mascot-figure img {
+          width: min(100%, 250px);
+        }
+
+        .alert-card {
+          grid-template-columns: 42px 1fr;
+        }
+
+        .alert-time {
+          grid-column: 2;
+        }
+
+        .assist-card {
+          padding: 1.5rem;
+        }
+
+        .vision-card {
+          align-items: start;
+        }
+
+        .waitlist-box {
+          padding: 2rem 1.1rem;
+        }
+
+        .waitlist-form button {
+          width: 100%;
+        }
+
+        footer {
+          padding-inline: 1.2rem;
+        }
+
+        .footer-logo {
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+        }
+
+        .footer-links {
+          gap: 0.65rem 1rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+        }
+
+        .scroll-reveal {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Saltar al contenido</a>
+
+    <!-- NAV -->
+    <nav class="site-nav" aria-label="Navegación principal">
+      <a
+        href="#inicio"
+        class="nav-logo"
+        aria-label="Doclyfi, volver al inicio"
+      >
+        <img class="logo-full" src="./doclyfi-logo.png" alt="Doclyfi" />
+        <img
+          class="logo-iso"
+          src="./doclyfi-logo-iso.png"
+          alt=""
+          aria-hidden="true"
+        />
+      </a>
+      <ul class="nav-links">
+        <li><a href="#funciones">Funciones</a></li>
+        <li><a href="#como-funciona">Cómo funciona</a></li>
+        <li><a href="#notificaciones">Alertas</a></li>
+        <li><a href="./privacidad.html">Privacidad</a></li>
+      </ul>
+      <details class="mobile-nav">
+        <summary aria-label="Abrir o cerrar menú"></summary>
+        <ul class="mobile-nav-links">
+          <li><a href="#funciones">Funciones</a></li>
+          <li><a href="#como-funciona">Cómo funciona</a></li>
+          <li><a href="#notificaciones">Alertas</a></li>
+          <li><a href="./privacidad.html">Privacidad</a></li>
+        </ul>
+      </details>
+      <a href="#lista" class="nav-cta">Unirse a la lista</a>
+    </nav>
+
+    <main id="main-content" tabindex="-1">
+      <!-- HERO -->
+      <section id="inicio" class="hero" aria-labelledby="hero-title">
+        <div class="hero-grid" aria-hidden="true"></div>
+        <div class="hero-glow" aria-hidden="true"></div>
+        <div class="hero-layout">
+          <div class="hero-copy">
+            <div class="eyebrow">Lista de espera abierta</div>
+            <h1 id="hero-title">
+              Tus documentos y gastos, <em>en orden.</em><br />
+              Tus fechas importantes, bajo control.
+            </h1>
+            <p class="hero-lede">
+              Doclyfi usa IA para identificar, organizar y extraer lo esencial
+              de tus documentos. Después, te ayuda a recordar pagos y
+              vencimientos desde la app y WhatsApp.
+            </p>
+            <div class="hero-actions">
+              <a href="#lista" class="btn-primary">Unirme a la lista de espera</a>
+              <a href="#como-funciona" class="btn-ghost">Ver cómo funciona</a>
+            </div>
+            <p class="hero-note">Experiencia pensada para iOS, Android y WhatsApp</p>
+          </div>
+
+          <div class="hero-visual" aria-label="Flujo de organización de documentos de Doclyfi">
+            <div class="demo-card">
+              <div class="demo-heading">
+                <div>
+                  <span class="demo-kicker">Flujo de documento</span>
+                  <strong>Docly entendió tu documento</strong>
+                </div>
+                <span class="demo-status">En revisión</span>
+              </div>
+              <div class="demo-document">
+                <span class="demo-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3.75h8.5L18 7.25v13H6z"/><path d="M14 3.75v4h4M8.5 11h7M8.5 14.5h7M8.5 18h4"/></svg>
+                </span>
+                <span><strong>Ticket de compra</strong><span>Foto enviada desde la app</span></span>
+              </div>
+              <div class="demo-extraction">
+                <div class="demo-field"><span>Tipo</span><strong>Garantía</strong></div>
+                <div class="demo-field"><span>Vence</span><strong>12 oct 2026</strong></div>
+              </div>
+            </div>
+            <div class="mascot-hero">
+              <img src="./public/docly_robot_transparent.PNG" alt="Docly, mascota de Doclyfi impulsada por IA" width="1600" height="1600" fetchpriority="high" />
+            </div>
+            <span class="visual-chip chip-channel">App · WhatsApp</span>
+            <span class="visual-chip chip-alert">Recordatorio oportuno</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- FUNCIONES -->
+      <section id="funciones" aria-labelledby="funciones-title">
+        <div class="container">
+          <div class="section-head">
+            <div class="section-label">Un archivo que piensa contigo</div>
+            <h2 id="funciones-title" class="section-title">Guarda lo importante. Entiende lo esencial.</h2>
+            <p class="section-desc">
+              Desde una garantía hasta un contrato o una credencial, Doclyfi
+              convierte documentos dispersos en información que puedes volver a
+              encontrar y usar.
+            </p>
+          </div>
+
+          <div class="feature-layout">
+            <article class="feature-panel">
+              <div>
+                <div class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H20v15H6.5A2.5 2.5 0 0 0 4 21z"/><path d="M4 6.5v12A2.5 2.5 0 0 1 6.5 21H20"/></svg>
+                </div>
+                <h3>Tu archivo, sin perder el contexto.</h3>
+                <p>Clasifica lo que guardas y encuentra la fecha, el monto o la vigencia que necesitas cuando la necesitas.</p>
+              </div>
+              <div class="document-pile" aria-hidden="true"><span></span><span></span><span></span></div>
+            </article>
+
+            <div class="feature-grid">
+              <article class="feature-card">
+                <div class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 19V9M12 19V5M19 19v-7"/><path d="M3 19.5h18"/></svg>
+                </div>
+                <h3>Gastos con contexto</h3>
+                <p>Registra compras y servicios para entender a dónde se va tu dinero sin convertirlo en otra tarea pesada.</p>
+              </article>
+              <article class="feature-card">
+                <div class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4v16M16 7.5c0-1.4-1.8-2.5-4-2.5S8 6.1 8 7.5s1.8 2.5 4 2.5 4 1.1 4 2.5-1.8 2.5-4 2.5-4-1.1-4-2.5"/></svg>
+                </div>
+                <h3>Datos que se encuentran</h3>
+                <p>Docly extrae fechas, montos y tipo de documento para que puedas volver a la información clave.</p>
+              </article>
+              <article class="feature-card">
+                <div class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4"/></svg>
+                </div>
+                <h3>Alertas a tiempo</h3>
+                <p>Recibe recordatorios antes de que una garantía, pago o contrato te tome por sorpresa.</p>
+              </article>
+              <article class="feature-card">
+                <div class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v11H4z"/><path d="m8 20 4-4 4 4M8 9h8M8 12h5"/></svg>
+                </div>
+                <h3>App y WhatsApp</h3>
+                <p>La experiencia está pensada para guardar documentos desde la app y enviar información desde WhatsApp.</p>
+              </article>
+              <article class="feature-card feature-card-wide">
+                <div class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 5h14v14H5z"/><path d="M8 9h8M8 12h8M8 15h5"/></svg>
+                </div>
+                <div>
+                  <h3>Desde una garantía hasta una credencial</h3>
+                  <p>Tickets, facturas, servicios del hogar, contratos, credenciales y carnets: el archivo crece contigo.</p>
+                </div>
+                <div class="channel-pills" aria-label="Tipos de documentos"><span>Garantías</span><span>Contratos</span><span>Credenciales</span></div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- COMO FUNCIONA -->
+      <section id="como-funciona" aria-labelledby="como-funciona-title">
+        <div class="container">
+          <div class="section-head">
+            <div class="section-label">Cómo funciona</div>
+            <h2 id="como-funciona-title" class="section-title">Del documento suelto al recordatorio oportuno.</h2>
+            <p class="section-desc">Así puede ayudarte Doclyfi a convertir una foto o un envío en información accionable.</p>
+          </div>
+          <div class="workflow-layout">
+            <ol class="workflow-steps">
+              <li class="workflow-step">
+                <span class="workflow-number">01</span>
+                <div><h3>Envías una foto o archivo</h3><p>Desde la app prevista para iOS y Android o desde WhatsApp, según el canal que estés usando.</p></div>
+              </li>
+              <li class="workflow-step">
+                <span class="workflow-number">02</span>
+                <div><h3>Docly identifica el tipo</h3><p>La IA analiza si es un ticket, factura, garantía, credencial, carnet, recibo o contrato.</p></div>
+              </li>
+              <li class="workflow-step">
+                <span class="workflow-number">03</span>
+                <div><h3>Extrae lo relevante</h3><p>Fechas, montos y otros datos útiles quedan listos para que los revises y organices.</p></div>
+              </li>
+              <li class="workflow-step">
+                <span class="workflow-number">04</span>
+                <div><h3>Recibes un recordatorio</h3><p>Cuando una fecha importante se acerque, Doclyfi busca ayudarte a llegar a tiempo.</p></div>
+              </li>
+            </ol>
+            <article class="workflow-demo" aria-label="Flujo de organización de documentos de Doclyfi">
+              <div class="demo-window-bar"><div class="window-dots" aria-hidden="true"><span></span><span></span><span></span></div><span class="demo-caption">Flujo de organización</span></div>
+              <div class="workflow-screen">
+                <div class="receipt-preview">
+                  <span class="demo-kicker">Documento recibido</span>
+                  <div class="demo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3.75h8.5L18 7.25v13H6z"/><path d="M14 3.75v4h4M8.5 11h7M8.5 14.5h5"/></svg></div>
+                  <h4>Factura de servicio</h4>
+                  <div class="receipt-line"></div><div class="receipt-line"></div><div class="receipt-line short"></div>
+                  <span class="demo-meta">Foto · 02 sep 2026</span>
+                </div>
+                <div class="extraction-panel">
+                  <h4>Datos identificados</h4>
+                  <div class="extraction-row"><span>Tipo</span><strong>Recibo de luz</strong></div>
+                  <div class="extraction-row"><span>Monto</span><strong>$348.00</strong></div>
+                  <div class="extraction-row"><span>Vencimiento</span><strong>09 sep 2026</strong></div>
+                  <div class="extraction-row"><span>Estado</span><strong style="color: var(--success)">Recordatorio listo</strong></div>
+                </div>
+              </div>
+              <p class="demo-disclaimer">Revisa siempre fechas, montos y datos extraídos antes de actuar.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+
+    <!-- MASCOTA -->
+    <section class="docly-spotlight" aria-labelledby="mascot-title">
+      <div class="container">
+        <div class="mascot-card">
+          <div class="mascot-copy">
+            <div class="section-label">Asistente de IA · Doclyfi</div>
+            <h2 id="mascot-title">Conoce a Docly, IA para cada documento.</h2>
+            <p>
+              Docly es la mascota de Doclyfi, impulsada por IA para ayudarte con
+              cualquier tipo de documento: garantías, recibos, contratos,
+              facturas y más. Organiza la información clave y mantén tus fechas
+              y alertas siempre bajo control.
+            </p>
+          </div>
+          <figure class="mascot-figure">
+            <img
+              src="./public/docly_robot_transparent.PNG"
+              alt="Docly, la mascota robot de Doclyfi"
+              width="1600"
+              height="1600"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALERTAS -->
+    <section id="notificaciones" aria-labelledby="notificaciones-title">
+      <div class="container">
+        <div class="alert-layout">
+          <div>
+            <div class="section-label">Alertas inteligentes</div>
+            <h2 id="notificaciones-title" class="section-title">No solo guardes la fecha. Llega a tiempo.</h2>
+            <p class="section-desc">Doclyfi busca ayudarte a recordar lo que suele perderse entre correos, carpetas y capturas: vencimientos, pagos y renovaciones.</p>
+            <ul class="alert-list">
+              <li><span class="check" aria-hidden="true">✓</span>Garantías próximas a vencer</li>
+              <li><span class="check" aria-hidden="true">✓</span>Servicios del hogar y pagos recurrentes</li>
+              <li><span class="check" aria-hidden="true">✓</span>Contratos con vigencia próxima a terminar</li>
+              <li><span class="check" aria-hidden="true">✓</span>Recordatorios desde la app y WhatsApp</li>
+            </ul>
+          </div>
+          <div class="alert-demo" aria-label="Alertas de Doclyfi">
+            <article class="alert-card"><span class="alert-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4"/></svg></span><div><strong>Garantía por vencer</strong><span>Bocinas · Guarda tu comprobante</span></div><span class="alert-time">7 días</span></article>
+            <article class="alert-card"><span class="alert-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3.75h12v16.5H6z"/><path d="M9 7.5h6M9 11h6M9 14.5h3"/></svg></span><div><strong>Recibo de luz</strong><span>Pago próximo · $348.00</span></div><span class="alert-time">viernes</span></article>
+            <article class="alert-card"><span class="alert-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 5h14v14H5z"/><path d="M8 9h8M8 12h5M8 15h8"/></svg></span><div><strong>Contrato de arrendamiento</strong><span>Revisión de vigencia</span></div><span class="alert-time">30 días</span></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ASISTENCIA -->
+    <section id="asistencia" class="assist-section" aria-labelledby="asistencia-title">
+      <div class="container">
+        <div class="assist-card">
+          <div>
+            <div class="section-label">Asistencia adicional</div>
+            <h2 id="asistencia-title">Cuando un documento necesita algo más.</h2>
+            <p>
+              Doclyfi contempla orientarte sobre los datos necesarios para
+              facturar una compra y, cuando el caso lo requiera, conectarte con
+              contadores certificados o abogados. Estas opciones se habilitarán
+              por etapas; Doclyfi no sustituye la asesoría profesional ni emite
+              facturas por cuenta propia.
+            </p>
+          </div>
+          <div class="assist-badges" aria-label="Disponibilidad de asistencia">
+            <span class="status-pill">Orientación prevista</span>
+            <span class="status-pill future">Conexión profesional</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONFIANZA -->
+    <section class="trust-section" aria-labelledby="trust-title">
+      <div class="container">
+        <div class="trust-panel">
+          <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 5 6v5c0 4.4 2.9 8.3 7 10 4.1-1.7 7-5.6 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+          <div><strong>Diseñada para documentos sensibles, con revisión humana en el centro.</strong><p>La IA puede equivocarse: revisa siempre fechas, montos y datos extraídos antes de tomar una decisión.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISIÓN -->
+    <section id="vision" class="vision-section" aria-labelledby="vision-title">
+      <div class="container">
+        <div class="vision-card">
+          <div>
+            <div class="section-label">Visión Doclyfi</div>
+            <h2 id="vision-title">Menos documentos perdidos. Más decisiones a tiempo.</h2>
+            <p>Estamos construyendo una capa sencilla de inteligencia para la vida administrativa diaria: guardar, entender y recordar sin hacerte perseguir tus propios archivos.</p>
+          </div>
+          <a class="vision-link" href="mailto:contacto@doclyfi.com?subject=Hablemos%20de%20Doclyfi">Hablemos de Doclyfi <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA / LISTA DE ESPERA -->
+    <section id="lista" aria-labelledby="lista-title">
+      <div class="container waitlist-box">
+        <div class="section-label">Próximo paso</div>
+        <h2 id="lista-title">Sé de los primeros en<br /><span>usar Doclyfi</span></h2>
+        <p>Déjanos tu correo y abre una conversación con el equipo. La lista de espera todavía no tiene un backend conectado.</p>
+        <form id="waitlist-form" class="waitlist-form" action="mailto:contacto@doclyfi.com" method="post" enctype="text/plain">
+          <label class="sr-only" for="lista-email">Correo electrónico</label>
+          <input id="lista-email" name="email" type="email" placeholder="tu@correo.com" autocomplete="email" inputmode="email" required />
+          <button type="submit">Quiero acceso anticipado</button>
+        </form>
+        <p class="form-note">Al enviar, se abrirá tu cliente de correo para que confirmes el mensaje. No mostraremos un registro exitoso porque aún no guardamos solicitudes automáticamente.</p>
+        <p id="form-status" class="form-status" aria-live="polite"></p>
+      </div>
+    </section>
+
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-inner">
+        <a
+          href="#inicio"
+          class="footer-logo"
+          aria-label="Doclyfi, volver al inicio"
+        >
+          <img class="logo-full" src="./doclyfi-logo.png" alt="Doclyfi" />
+          <img
+            class="logo-iso"
+            src="./doclyfi-logo-iso.png"
+            alt=""
+            aria-hidden="true"
+          />
+        </a>
+        <nav class="footer-links" aria-label="Navegación del pie de página">
+          <a href="#funciones">Funciones</a>
+          <a href="#como-funciona">Cómo funciona</a>
+          <a href="#notificaciones">Alertas</a>
+          <a href="#lista">Lista de espera</a>
+          <a href="#vision">Visión</a>
+          <a href="./privacidad.html">Privacidad</a>
+          <a href="mailto:contacto@doclyfi.com">Contacto</a>
+        </nav>
+        <p class="footer-copy">© 2026 Doclyfi · Zapopan, Jalisco, México</p>
+      </div>
+    </footer>
+
+    <script>
+      (() => {
+        const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const revealTargets = document.querySelectorAll(
+          "section:not(#inicio) .section-head, .feature-card, .workflow-step, .alert-card, .mascot-card, .assist-card, .vision-card, .waitlist-box",
+        );
+
+        if (!motionQuery.matches && "IntersectionObserver" in window) {
+          const revealObserver = new IntersectionObserver(
+            (entries, observer) => {
+              entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+              });
+            },
+            { rootMargin: "0px 0px -10% 0px", threshold: 0.12 },
+          );
+
+          revealTargets.forEach((target, index) => {
+            target.classList.add("scroll-reveal");
+            target.style.setProperty(
+              "--reveal-delay",
+              `${Math.min(index % 6, 5) * 45}ms`,
+            );
+            revealObserver.observe(target);
+          });
+        }
+
+        const waitlistForm = document.querySelector("#waitlist-form");
+        const waitlistStatus = document.querySelector("#form-status");
+        const waitlistButton = waitlistForm?.querySelector("button");
+
+        waitlistForm?.addEventListener("submit", (event) => {
+          event.preventDefault();
+          if (!waitlistForm.reportValidity()) return;
+
+          const email = waitlistForm.elements.email.value.trim();
+          const subject = encodeURIComponent("Lista de espera Doclyfi");
+          const body = encodeURIComponent(
+            `Hola, quiero unirme a la lista de espera de Doclyfi.\n\nMi correo es: ${email}`,
+          );
+
+          waitlistButton?.setAttribute("aria-busy", "true");
+          if (waitlistButton) waitlistButton.textContent = "Abriendo correo…";
+          if (waitlistStatus) {
+            waitlistStatus.dataset.state = "info";
+            waitlistStatus.textContent =
+              "Se abrirá tu cliente de correo. La solicitud quedará enviada únicamente cuando confirmes el mensaje.";
+          }
+
+          window.location.href = `mailto:contacto@doclyfi.com?subject=${subject}&body=${body}`;
+        });
+      })();
+    </script>
+  </body>
+</html>

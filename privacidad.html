@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b1633" />
+    <title>Aviso de Privacidad — Doclyfi</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="./doclyfi-logo-iso.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #f6f9fd;
+        --surface: #ffffff;
+        --soft: #eaf2fd;
+        --brand: #248cf4;
+        --brand-strong: #006bff;
+        --ink: #0b1633;
+        --muted: #52627a;
+        --line: #d6e4f5;
+        --cyan: #52d8ff;
+      }
+      *,*::before,*::after { box-sizing: border-box; }
+      html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+      body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Work Sans", sans-serif; line-height: 1.7; }
+      a { color: inherit; }
+      .skip-link { position: fixed; top: .75rem; left: 1rem; z-index: 10; transform: translateY(-200%); padding: .6rem .9rem; border: 2px solid var(--brand-strong); border-radius: 8px; background: var(--surface); font-weight: 700; text-decoration: none; }
+      .skip-link:focus-visible { transform: translateY(0); }
+      a:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+      .site-nav { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; min-height: 76px; padding: 0 5vw; border-bottom: 1px solid rgba(214,228,245,.86); background: rgba(246,249,253,.92); backdrop-filter: blur(18px); }
+      .nav-logo { position: relative; display: block; width: 144px; height: 42px; overflow: hidden; border-radius: 8px; }
+      .nav-logo img { position: absolute; display: block; height: auto; }
+      .nav-logo .logo-full { top: -50px; left: -46px; width: 214px; }
+      .nav-logo .logo-iso { display: none; }
+      .nav-back { color: var(--brand-strong); font-family: "Outfit", sans-serif; font-size: .88rem; font-weight: 700; text-decoration: none; }
+      main { width: min(1120px, calc(100% - 2.4rem)); margin: 0 auto; padding: 5.5rem 0 7rem; }
+      .intro { max-width: 720px; margin-bottom: 3rem; }
+      .eyebrow { color: var(--brand-strong); font-family: "Outfit", sans-serif; font-size: .76rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+      h1,h2,h3 { font-family: "Outfit", sans-serif; line-height: 1.05; letter-spacing: -.045em; }
+      h1 { margin: .8rem 0 1rem; font-size: clamp(2.8rem, 7vw, 5.4rem); }
+      .intro p { max-width: 60ch; margin: 0; color: var(--muted); font-size: 1.05rem; }
+      .privacy-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 2rem; align-items: start; }
+      .privacy-nav { position: sticky; top: 100px; padding: 1rem; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+      .privacy-nav strong { display: block; margin-bottom: .55rem; font-family: "Outfit", sans-serif; }
+      .privacy-nav ul { display: grid; gap: .18rem; margin: 0; padding: 0; list-style: none; }
+      .privacy-nav a { color: var(--muted); font-size: .78rem; text-decoration: none; }
+      .privacy-nav a:hover { color: var(--brand-strong); }
+      .privacy-content { display: grid; gap: 1rem; }
+      .priv-section { padding: 1.5rem 1.6rem; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+      .priv-section h2 { display: flex; gap: .6rem; align-items: baseline; margin: 0 0 .7rem; font-size: 1.35rem; }
+      .priv-num { color: var(--brand-strong); font-size: .8rem; letter-spacing: .08em; }
+      .priv-section p,.priv-section li { color: var(--muted); font-size: .92rem; }
+      .priv-section ul { margin: .5rem 0 0; padding-left: 1.1rem; }
+      .priv-address,.priv-highlight { margin-top: .8rem; padding: .85rem 1rem; border-left: 3px solid var(--brand); background: var(--soft); color: var(--ink); font-size: .88rem; }
+      .sub-group + .sub-group { margin-top: 1rem; }
+      .sub-label { color: var(--ink); font-family: "Outfit", sans-serif; font-size: .86rem; font-weight: 700; }
+      .priv-contact { color: var(--brand-strong); font-weight: 700; }
+      footer { padding: 2rem 5vw; border-top: 1px solid var(--line); color: var(--muted); font-size: .8rem; text-align: center; }
+      @media (max-width: 760px) {
+        .site-nav { min-height: 68px; padding: 0 1rem; }
+        .nav-logo { width: 42px; height: 42px; border-radius: 50%; }
+        .nav-logo .logo-full { display: none; }
+        .nav-logo .logo-iso { display: block; top: -11px; left: -23px; width: 79px; height: auto; }
+        main { padding-top: 4rem; }
+        .privacy-layout { grid-template-columns: 1fr; }
+        .privacy-nav { position: static; }
+      }
+      @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header class="site-nav">
+      <a class="nav-logo" href="./index.html" aria-label="Doclyfi, volver al inicio"><img class="logo-full" src="./doclyfi-logo.png" alt="Doclyfi" /><img class="logo-iso" src="./doclyfi-logo-iso.png" alt="" aria-hidden="true" /></a>
+      <a class="nav-back" href="./index.html">Volver a Doclyfi</a>
+    </header>
+    <main id="contenido">
+      <div class="intro">
+        <div class="eyebrow">Información legal</div>
+        <h1>Aviso de Privacidad</h1>
+        <p>En Doclyfi tu información es tuya. Aquí te explicamos con total transparencia cómo la tratamos.</p>
+      </div>
+      <div class="privacy-layout">
+        <aside class="privacy-nav" aria-label="Índice del aviso de privacidad">
+          <strong>Índice</strong>
+          <ul>
+            <li><a href="#p1">1. Responsable</a></li>
+            <li><a href="#p2">2. Datos recopilados</a></li>
+            <li><a href="#p3">3. Finalidades</a></li>
+            <li><a href="#p4">4. Tecnologías</a></li>
+            <li><a href="#p5">5. Acceso</a></li>
+            <li><a href="#p6">6. Transferencia</a></li>
+            <li><a href="#p7">7. Seguridad</a></li>
+            <li><a href="#p8">8. Derechos ARCO</a></li>
+            <li><a href="#p9">9. WhatsApp</a></li>
+            <li><a href="#p10">10. Conservación</a></li>
+            <li><a href="#p11">11. Cambios</a></li>
+            <li><a href="#p12">12. Consentimiento</a></li>
+          </ul>
+        </aside>
+        <div class="privacy-content">
+          <section class="priv-section" id="p1"><h2><span class="priv-num">01</span> Responsable</h2><p>Doclyfi es responsable del tratamiento de sus datos personales.</p><div class="priv-address">Av. Paseo Royal Country 4650<br />Puerta de Hierro, Zapopan, Jalisco<br />México</div></section>
+          <section class="priv-section" id="p2"><h2><span class="priv-num">02</span> Datos personales recopilados</h2><p>Se podrán recopilar los siguientes datos:</p><div class="sub-group"><div class="sub-label">Datos de identificación</div><ul><li>Nombre</li><li>Teléfono</li><li>Correo electrónico</li></ul></div><div class="sub-group"><div class="sub-label">Datos fiscales</div><ul><li>RFC</li><li>Domicilio fiscal</li><li>Información de facturación</li></ul></div><div class="sub-group"><div class="sub-label">Datos de documentos</div><ul><li>Tickets</li><li>Recibos</li><li>Contratos</li><li>Información financiera contenida en ellos</li></ul></div><div class="sub-group"><div class="sub-label">Datos de uso</div><ul><li>Interacción con la app</li><li>Fechas y comportamiento</li></ul></div></section>
+          <section class="priv-section" id="p3"><h2><span class="priv-num">03</span> Finalidades del tratamiento</h2><div class="sub-group"><div class="sub-label">Finalidades primarias</div><ul><li>Crear y administrar cuentas</li><li>Almacenar documentos</li><li>Procesar información mediante OCR</li><li>Generar recordatorios y alertas</li><li>Generar resúmenes financieros</li></ul></div><div class="sub-group"><div class="sub-label">Finalidades secundarias</div><ul><li>Mejorar el servicio</li><li>Analítica</li><li>Comunicación con el usuario</li></ul></div></section>
+          <section class="priv-section" id="p4"><h2><span class="priv-num">04</span> Uso de tecnologías (OCR y automatización)</h2><p>Doclyfi utiliza tecnologías de reconocimiento óptico de caracteres (OCR) y procesamiento automatizado.</p><div class="priv-highlight">Estos procesos pueden tener errores y generar estimaciones. No reemplazan la revisión manual del usuario.</div></section>
+          <section class="priv-section" id="p5"><h2><span class="priv-num">05</span> Acceso a la información</h2><p>Doclyfi declara que:</p><ul><li>No accede manualmente a los documentos.</li><li>No analiza contenido de forma humana.</li><li>El procesamiento es completamente automatizado.</li></ul></section>
+          <section class="priv-section" id="p6"><h2><span class="priv-num">06</span> Transferencia de datos</h2><p>Doclyfi podrá compartir datos con proveedores tecnológicos, servicios de nube y plataformas como WhatsApp, siempre bajo medidas de seguridad.</p><div class="priv-highlight">Los datos personales no serán vendidos bajo ninguna circunstancia.</div></section>
+          <section class="priv-section" id="p7"><h2><span class="priv-num">07</span> Seguridad</h2><p>Doclyfi implementa medidas técnicas razonables para proteger tu información:</p><ul><li>Cifrado de datos</li><li>Controles de acceso</li><li>Medidas técnicas razonables de protección</li></ul></section>
+          <section class="priv-section" id="p8"><h2><span class="priv-num">08</span> Derechos ARCO</h2><p>El usuario puede ejercer sus derechos de Acceso, Rectificación, Cancelación y Oposición en cualquier momento mediante solicitud a:</p><a class="priv-contact" href="mailto:contacto@doclyfi.com">contacto@doclyfi.com</a></section>
+          <section class="priv-section" id="p9"><h2><span class="priv-num">09</span> Uso de WhatsApp</h2><p>Al usar WhatsApp como canal de comunicación con Doclyfi, el usuario acepta las políticas de dicha plataforma. Doclyfi no controla ni es responsable de la infraestructura de WhatsApp.</p></section>
+          <section class="priv-section" id="p10"><h2><span class="priv-num">10</span> Conservación de datos</h2><p>Los datos personales se conservarán mientras:</p><ul><li>Exista una relación activa con el usuario.</li><li>Sea necesario para la prestación del servicio.</li></ul></section>
+          <section class="priv-section" id="p11"><h2><span class="priv-num">11</span> Cambios al aviso</h2><p>Doclyfi puede modificar este aviso de privacidad en cualquier momento. Se recomienda al usuario revisar periódicamente este documento para estar al tanto de cualquier actualización.</p></section>
+          <section class="priv-section" id="p12"><h2><span class="priv-num">12</span> Consentimiento</h2><div class="priv-highlight">Al usar Doclyfi, el usuario acepta los términos descritos en este aviso de privacidad.</div></section>
+        </div>
+      </div>
+    </main>
+    <footer>© 2026 Doclyfi · Zapopan, Jalisco, México · <a href="mailto:contacto@doclyfi.com">Contacto</a></footer>
+  </body>
+</html>
