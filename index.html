@@ -2332,7 +2332,7 @@
         box-shadow: var(--shadow-sm);
       }
 
-      .alert-icon {
+      .alert-card .alert-icon {
         display: grid;
         place-items: center;
         width: 42px;
@@ -2340,6 +2340,10 @@
         border-radius: 13px;
         background: rgba(82, 216, 255, 0.18);
         color: var(--brand-strong);
+      }
+
+      .alert-card .alert-icon svg {
+        display: block;
       }
 
       .alert-card strong,
@@ -2877,10 +2881,21 @@
         }
 
         .footer-logo {
-          width: 42px;
-          height: 42px;
+          width: 132px;
+          height: 38px;
           border-radius: 0;
           overflow: hidden;
+        }
+
+        .footer-logo .logo-full {
+          display: block;
+          top: -47px;
+          left: -44px;
+          width: 201px;
+        }
+
+        .footer-logo .logo-iso {
+          display: none;
         }
 
         .footer-links {
