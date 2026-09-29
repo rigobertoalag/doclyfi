@@ -1284,6 +1284,7 @@
         .mascot-card {
           grid-template-columns: 1fr;
           gap: 0;
+          overflow: visible;
         }
         .mascot-copy {
           padding: 2rem 1.5rem 0.5rem;
@@ -2806,6 +2807,7 @@
         .mascot-card {
           grid-template-columns: 1fr;
           gap: 0;
+          overflow: visible;
         }
 
         .mascot-copy {
@@ -2818,9 +2820,12 @@
         }
 
         .mascot-figure img {
+          display: block;
           width: min(100%, 320px);
+          max-width: 100%;
           height: auto;
           max-height: none;
+          margin-inline: auto;
           object-fit: contain;
         }
 
