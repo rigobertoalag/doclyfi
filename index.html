@@ -2667,7 +2667,8 @@
         .nav-logo {
           width: 42px;
           height: 42px;
-          border-radius: 50%;
+          border-radius: 0;
+          overflow: hidden;
         }
 
         .nav-logo .logo-full,
@@ -2680,7 +2681,7 @@
           display: block;
           inset: auto;
           top: -11px;
-          left: -23px;
+          left: -22px;
           width: 79px;
           height: auto;
           object-fit: initial;
@@ -2693,6 +2694,7 @@
 
         .hero {
           padding: 7.5rem 1.2rem 4.5rem;
+          overflow: visible;
         }
 
         .hero-layout {
@@ -2714,12 +2716,25 @@
         }
 
         .hero-visual {
-          min-height: 420px;
+          min-height: 620px;
+          overflow: visible;
         }
 
         .mascot-hero {
-          right: 0;
-          width: min(75vw, 330px);
+          top: 9.5rem;
+          right: auto;
+          bottom: auto;
+          left: 50%;
+          width: min(94vw, 380px);
+          transform: translateX(-50%);
+          animation: none;
+        }
+
+        .mascot-hero img {
+          display: block;
+          width: 100%;
+          height: auto;
+          object-fit: contain;
         }
 
         .demo-card {
@@ -2755,7 +2770,25 @@
         }
 
         .feature-card-wide {
+          grid-template-columns: 38px minmax(0, 1fr);
+          gap: 0.75rem;
           align-items: start;
+        }
+
+        .feature-card-wide > div:nth-child(2) {
+          min-width: 0;
+        }
+
+        .feature-card-wide h3 {
+          margin-top: 0;
+          font-size: 1.05rem;
+          line-height: 1.1;
+        }
+
+        .feature-card-wide .channel-pills {
+          grid-column: 2;
+          justify-content: flex-start;
+          gap: 0.4rem;
         }
 
         .channel-pills {
@@ -2780,19 +2813,42 @@
         }
 
         .mascot-figure {
-          min-height: 260px;
+          min-height: 380px;
+          overflow: visible;
         }
 
         .mascot-figure img {
-          width: min(100%, 250px);
+          width: min(100%, 320px);
+          height: auto;
+          max-height: none;
+          object-fit: contain;
         }
 
         .alert-card {
-          grid-template-columns: 42px 1fr;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 0.3rem;
+          min-height: 94px;
+          padding: 1rem 1rem 1rem 4.7rem;
+          text-align: left;
+        }
+
+        .alert-card > div {
+          min-width: 0;
+        }
+
+        .alert-icon {
+          position: absolute;
+          top: 50%;
+          left: 1rem;
+          transform: translateY(-50%);
         }
 
         .alert-time {
-          grid-column: 2;
+          margin-top: 0.05rem;
         }
 
         .assist-card {
@@ -2818,7 +2874,8 @@
         .footer-logo {
           width: 42px;
           height: 42px;
-          border-radius: 50%;
+          border-radius: 0;
+          overflow: hidden;
         }
 
         .footer-links {
